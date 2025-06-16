@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from rag import create_vector
-from llm import query_llm
+from llm import query
 
 app = FastAPI()
 db = create_vector("any.pdf")

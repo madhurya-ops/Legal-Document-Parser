@@ -16,7 +16,7 @@ headers = {
     "Content-Type": "application/json"
 }
 
-def introduction(context: str, prompt: str) -> str:
+def query(context: str, prompt: str) -> str:
     data = {
         "model": "mistralai/Mistral-7B-Instruct-v0.2",
         "messages": [
