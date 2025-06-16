@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
+import os
 
 app = FastAPI()
 
@@ -11,7 +12,7 @@ class UserInput(BaseModel):
 HF_API_URL = "https://router.huggingface.co/featherless-ai/v1/chat/completions"
 
 headers = {
-    "Authorization": "",
+    "Authorization": os.getenv("HF_API_KEY"),
     "Content-Type": "application/json"
 }
 

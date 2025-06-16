@@ -8,3 +8,4 @@ langchain-chroma
 langchain-huggingface
 PyPDF2
 chromadb
+os

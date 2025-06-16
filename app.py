@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from rag_utils import build_vector_db_from_pdf
+from rag import create_vector
 from llm import query_llm
 
 app = FastAPI()
@@ -8,7 +8,7 @@ db = create_vector("any.pdf")
 
 class Query(BaseModel):
     question: str
-
+    
 @app.post("/ask")
 def ask_question(query: Query):
     try:
