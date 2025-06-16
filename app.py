@@ -15,7 +15,7 @@ def ask_question(query: Query):
         retriever = db.as_retriever(search_kwargs={"k": 5})
         retrieved_docs = retriever.get_relevant_documents(query.question)
         context = "\n\n".join([doc.page_content for doc in retrieved_docs])
-        answer = query_llm(context=context, prompt=query.question)
+        answer = query(context=context, prompt=query.question)
         return {"answer": answer}
     except Exception as e:
         print(f"Error processing query: {e}")
