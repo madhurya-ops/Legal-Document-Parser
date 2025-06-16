@@ -27,8 +27,3 @@ def introduction(context: str, prompt: str) -> str:
     print(response.text)  
     response.raise_for_status()  
     return response.json()["choices"][0]["message"]["content"]
-
-@app.post("/gen")
-def generate_introduction(user_input: UserInput):
-    intro = introduction(user_input.context, user_input.prompt)
-    return {"introduction": intro}

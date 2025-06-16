@@ -1,0 +1,10 @@
+fastapi
+pydantic
+uvicorn
+requests
+langchain
+langchain-community
+langchain-chroma
+langchain-huggingface
+PyPDF2
+chromadb
