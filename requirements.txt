@@ -8,4 +8,6 @@ langchain-chroma
 langchain-huggingface
 PyPDF2
 chromadb
-os
+node
+npm
+tailwind
