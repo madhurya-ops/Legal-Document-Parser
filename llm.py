@@ -1,13 +1,5 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
 import requests
 import os
-
-app = FastAPI()
-
-class UserInput(BaseModel):
-    context: str
-    prompt: str
 
 HF_API_URL = "https://router.huggingface.co/featherless-ai/v1/chat/completions"
 
