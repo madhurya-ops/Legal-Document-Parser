@@ -25,13 +25,13 @@ This application aims to streamline the process of analyzing legal documents by 
 ## Objectives
 
 ### Save Time and Reduce Manual Effort
-Our tool helps lawyers, paralegals, and business teams quickly extract and summarize key details from legal documents — freeing up their time for more important and strategic tasks instead of combing through large amounts of text.
+- Our tool helps lawyers, paralegals, and business teams quickly extract and summarize key details from legal documents — freeing up their time for more important and strategic tasks instead of combing through large amounts of text.
 
 ### Make Legal Documents Easier to Understand
-We aim to break down complex legal language into clear and simple explanations, making it easier for non-lawyers or business stakeholders to make-informed decisions without needing extensive legal expertise.
+- We aim to break down complex legal language into clear and simple explanations, making it easier for non-lawyers or business stakeholders to make-informed decisions without needing extensive legal expertise.
 
 ### Create a Flexible and Scalable Platform
-Our solution is designed to work with different document formats (PDF, DOCX, TXT) and across a range of legal sectors — ensuring that it can grow and adapt alongside your needs in the future.
+- Our solution is designed to work with different document formats (PDF, DOCX, TXT) and across a range of legal sectors — ensuring that it can grow and adapt alongside your needs in the future.
 
 
 ## Authors
