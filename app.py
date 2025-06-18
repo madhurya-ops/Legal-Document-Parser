@@ -3,6 +3,9 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from rag import create_vector
 from llm import query as llm_query  # ✅ Rename to avoid conflict
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 

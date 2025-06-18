@@ -4,7 +4,7 @@ import os
 HF_API_URL = "https://router.huggingface.co/featherless-ai/v1/chat/completions"
 
 headers = {
-    "Authorization": os.getenv("HF_API_KEY"),
+    "Authorization": "Bearer",
     "Content-Type": "application/json"
 }
 
