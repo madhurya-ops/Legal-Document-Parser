@@ -1,14 +1,16 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from rag import get_retriever
+from app.core.vector_store import get_retriever
 
-app = FastAPI()
+router = APIRouter()
+
+# Initialize retriever once at module level
 retriever = get_retriever(k=5)
 
 class Query(BaseModel):
     question: str
 
-@app.post("/ask")
+@router.post("/ask")
 def ask_question(query: Query):
     try:
         docs = retriever.get_relevant_documents(query.question)
