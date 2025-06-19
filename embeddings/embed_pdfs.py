@@ -8,7 +8,7 @@ import pickle
 
 # Settings
 pdf_folder = "pdfs"
-index_path = "faiss_index"
+index_path = "index"
 embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=250)
 
