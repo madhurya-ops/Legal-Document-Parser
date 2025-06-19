@@ -1,14 +1,12 @@
 import requests
 import os
 from app.core.config import SYSTEM_PROMPT
-
 HF_API_URL = "https://router.huggingface.co/featherless-ai/v1/chat/completions"
 
 headers = {
     "Authorization": os.getenv("HF_API_KEY"),
     "Content-Type": "application/json"
 }
-
 def query_llm(prompt: str, context: str = SYSTEM_PROMPT) -> str:
     data = {
         "model": "mistralai/Mistral-7B-Instruct-v0.2",
