@@ -12,3 +12,6 @@ torch
 PyPDF2
 python-dotenv
 watchfiles
+node
+npm
+tailwind
