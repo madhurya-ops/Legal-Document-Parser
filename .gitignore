@@ -1,2 +1,11 @@
+__pycache__/
+*.pyc
+.env
+venv/
+index/
+*.faiss
+*.pkl
+.DS_Store
 .DS_Store
 __pycache__/
+pdfs/
