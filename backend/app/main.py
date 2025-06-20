@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost:3000",  # local dev
     "http://127.0.0.1:3000",
-    "https://your-vercel-app.vercel.app"  # <-- replace with your actual Vercel domain
+    "https://legaldoc-six.vercel.app"  # <-- replace with your actual Vercel domain
 ]
 app.add_middleware(
     CORSMiddleware,
