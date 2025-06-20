@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 __pycache__/
 *.pyc
 .env
@@ -7,7 +6,4 @@ index/
 *.faiss
 *.pkl
 .DS_Store
-=======
-.DS_Store
-__pycache__/
->>>>>>> 281b2fccb4279bdff35c5c9e547e54f791c14688
+node_modules
