@@ -35,7 +35,7 @@ export default function App() {
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300"> 
       {/* Sidebar */}
-      <div className="w-80 flex flex-col h-screen m-4 rounded-2xl shadow-2xl backdrop-blur-md bg-white/80 dark:bg-slate-900/80 bg-dots border border-slate-200 dark:border-slate-700">
+      <div className="w-72 flex flex-col h-200 m-4 rounded-2xl shadow-2xl backdrop-blur-md bg-white/80 dark:bg-slate-900/80 bg-dots border border-slate-200 dark:border-slate-700">
         {/* AppHeader */}
         <div className="p-4 flex items-center justify-between rounded-2xl shadow-2xl backdrop-blur-md bg-white/80 dark:bg-slate-900/80 bg-dots mb-2">
           <div className="flex items-center gap-3">
