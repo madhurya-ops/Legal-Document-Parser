@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - HF_API_KEY=REMOVEDeFTNPVXgzfaeAuwLwmQkGutiCnUNzLlzfu
+      - HF_API_KEY=${HF_API_KEY}
     volumes:
       - ./index:/app/index
 
