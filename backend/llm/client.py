@@ -1,7 +1,7 @@
 import requests
 import os
 
-HF_API_URL = "https://router.huggingface.co/featherless-ai/v1/chat/completions"
+HF_API_URL = "https://router.huggingface.co/novita/v3/openai/chat/completions"
 
 # Correct API key usage
 api_key = os.environ.get('HF_API_KEY')
