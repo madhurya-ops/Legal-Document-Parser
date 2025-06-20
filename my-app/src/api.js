@@ -10,11 +10,21 @@ const api = axios.create({
 // Sends a question to the FastAPI backend and returns the answer
 export const sendQuery = async (question) => {
   try {
+<<<<<<< HEAD
     const response = await api.post('/ask', { question });
     if (response.data && response.data.answer) {
       return response.data.answer;
+=======
+    const response = await api.post('/ask', payload);
+    if (response.data && typeof response.data === 'object') {
+      if ('answer' in response.data) {
+        return response.data.answer;
+      } else {
+        return JSON.stringify(response.data);
+      }
+>>>>>>> 5721d64 (Added functional dynamic Frontend integrated with Backend.)
     } else {
-      return 'No answer returned from server.';
+      return String(response.data);
     }
   } catch (error) {
     console.error('❌ Error querying backend:', error);

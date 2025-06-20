@@ -1,0 +1,11 @@
+app = "legal-document-parser"
+primary_region = "bom"
+
+[build]
+
+[env]
+
+[vm]
+  memory = 512
+  cpu_kind = "shared"
+  cpus = 1

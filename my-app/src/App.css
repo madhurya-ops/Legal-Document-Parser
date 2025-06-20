@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .App {
   text-align: center;
 }
@@ -34,5 +35,39 @@
   }
   to {
     transform: rotate(360deg);
+=======
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.fade-in-home, .fade-in-chat {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.bg-dots {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='%239ca3af' fill-opacity='0.12'/%3E%3C/svg%3E");
+  background-size: 20px 20px;
+}
+
+.chat-message-animate {
+  animation: chatFadeInUp 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes chatFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+>>>>>>> 5721d64 (Added functional dynamic Frontend integrated with Backend.)
   }
 }
