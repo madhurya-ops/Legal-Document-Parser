@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { ScrollArea } from "./ui/scroll-area";
 import { Badge } from "./ui/badge";
-import { Send, Bot, User, FileText, Scale, Loader2, MessageSquare } from "lucide-react";
+import { Bot, User, FileText, Scale, Loader2, MessageSquare, Send } from "lucide-react";
 import { sendQuery } from "../api";
 
 function readFileAsText(file) {
@@ -84,7 +83,7 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
       {/* Chat area (scrollable) */}
       <div className="absolute inset-0 flex flex-col">
         <div className="flex-1 min-h-0 flex flex-col pb-[110px] bg-dots"> {/* Reserve space for input */}
-          <ScrollArea
+          <div
             className="flex-1 min-h-0 p-4 sm:p-6 overflow-y-auto bg-dots pb-32"
             ref={scrollAreaRef}
             style={{ minHeight: 0 }}
@@ -172,7 +171,7 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
                 </div>
               )}
             </div>
-          </ScrollArea>
+          </div>
         </div>
         {/* Input box (floating, translucent) */}
         <div className="absolute left-0 right-0 bottom-6 z-20 flex justify-center pointer-events-none bg-dots">

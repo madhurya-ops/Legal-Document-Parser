@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from "react";
-import FileUpload from "./components/FileUpload";
-import ChatInterface from "./components/ChatInterface";
+import React, { useState, useMemo, Suspense, lazy } from "react";
+// Lazy load heavy components
+const FileUpload = lazy(() => import("./components/FileUpload"));
+const ChatInterface = lazy(() => import("./components/ChatInterface"));
 import ThemeToggle from "./components/ThemeToggle";
 import { Card } from "./components/ui/card";
 import { Badge } from "./components/ui/badge";
-import { ScrollArea } from "./components/ui/scroll-area";
 import { Scale, FileText, MessageSquare, X, Search } from "lucide-react";
 import "./App.css";
 
@@ -49,10 +49,12 @@ export default function App() {
         </div>
         {/* UploadBox */}
         <div className="p-2">
-          <FileUpload onFileUpload={handleFileUpload} selectedDocument={selectedDocument} boxSize="small" />
+          <Suspense fallback={<div>Loading upload...</div>}>
+            <FileUpload onFileUpload={handleFileUpload} selectedDocument={selectedDocument} boxSize="small" />
+          </Suspense>
         </div>
         {/* SearchBar & Document List (Scrollable, sticky search) */}
-        <ScrollArea className="flex-1 flex flex-col p-4">
+        <div className="flex-1 flex flex-col p-4 overflow-y-auto">
           <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 pb-2">
             <div className="relative mb-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -103,7 +105,7 @@ export default function App() {
               ))
             )}
           </div>
-        </ScrollArea>
+        </div>
       </div>
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-screen bg-slate-50 dark:bg-slate-900">
@@ -125,11 +127,13 @@ export default function App() {
               <div className="flex-1 flex flex-col">
                 <div className="flex-1 flex flex-col">
                   <div className="flex-1 flex flex-col fade-in-chat">
-                    <ChatInterface
-                      uploadedFile={selectedDocument}
-                      messages={messages}
-                      setMessages={setMessages}
-                    />
+                    <Suspense fallback={<div>Loading chat...</div>}>
+                      <ChatInterface
+                        uploadedFile={selectedDocument}
+                        messages={messages}
+                        setMessages={setMessages}
+                      />
+                    </Suspense>
                   </div>
                 </div>
               </div>

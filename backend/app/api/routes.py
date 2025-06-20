@@ -14,7 +14,7 @@ class Query(BaseModel):
     file_content: Optional[str] = None
 
 @router.post("/ask")
-def ask_question(query_data: Query):
+async def ask_question(query_data: Query):
     try:
         docs = retriever.get_relevant_documents(query_data.question)
         context = "\n\n".join([doc.page_content for doc in docs])

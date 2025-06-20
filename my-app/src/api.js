@@ -1,32 +1,28 @@
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: 'http://localhost:8000', // Adjust if FastAPI is running elsewhere
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
 // Sends a question to the FastAPI backend and returns the answer
 export const sendQuery = async (payload) => {
+  const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
   try {
-    const response = await api.post('/ask', payload);
-    if (response.data && typeof response.data === 'object') {
-      if ('answer' in response.data) {
-        return response.data.answer;
+    const response = await fetch(`${baseURL}/ask`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json();
+    if (data && typeof data === 'object') {
+      if ('answer' in data) {
+        return data.answer;
       } else {
-        return JSON.stringify(response.data);
+        return JSON.stringify(data);
       }
     } else {
-      return String(response.data);
+      return String(data);
     }
   } catch (error) {
     console.error('❌ Error querying backend:', error);
-    if (error.response && error.response.data?.detail) {
-      return `Server error: ${error.response.data.detail}`;
-    }
     return 'Something went wrong while connecting to the server.';
   }
 };
 
-export default api;
+export default sendQuery;

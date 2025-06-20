@@ -1,0 +1,10 @@
+fastapi==0.110.2
+uvicorn==0.29.0
+pydantic==2.7.1
+requests==2.31.0
+langchain
+faiss-cpu==1.8.0
+huggingface_hub==0.23.0
+langchain-huggingface
+langchain-community==0.0.38
+pypdf

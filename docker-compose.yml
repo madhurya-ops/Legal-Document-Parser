@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - HF_API_KEY=REMOVEDeFTNPVXgzfaeAuwLwmQkGutiCnUNzLlzfu
+    volumes:
+      - ./index:/app/index
+
+  frontend:
+    build: ./my-app
+    ports:
+      - "3000:80"
+    # Uncomment and set if you want to pass backend URL to frontend at build time:
+    # environment:
+    #   - REACT_APP_API_URL=http://localhost:8000
