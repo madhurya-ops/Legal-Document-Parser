@@ -1,7 +1,7 @@
 import os
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from tqdm import tqdm
 import pickle
@@ -34,9 +34,12 @@ def process_and_store_pdfs():
 
     if documents:
         print(f"Embedding {len(documents)} documents...")
-        db = FAISS.from_documents(documents, embedding_model)
-        db.save_local(index_path)
-        print(f"FAISS vector store saved to {index_path}.")
+        try:
+            db = FAISS.from_documents(documents, embedding_model)
+            db.save_local(index_path)
+            print(f"FAISS vector store saved to {index_path}.")
+        except Exception as e:
+            print(f"Error saving vector store: {e}")
     else:
         print("No documents processed.")
 

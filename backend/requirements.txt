@@ -16,3 +16,5 @@ python-dotenv==1.0.0
 python-multipart==0.0.9
 python-jose[cryptography]==3.3.0
 email-validator==2.1.0
+# Memory optimization
+numpy==1.24.3

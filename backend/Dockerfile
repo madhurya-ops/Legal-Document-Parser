@@ -16,8 +16,10 @@ COPY . .
 # Create production start script
 RUN echo '#!/bin/bash\n\
 echo "Starting LegalDoc API..."\n\
-python embeddings/embed_pdfs.py\n\
-uvicorn app.main:app --host 0.0.0.0 --port 8000' > /app/start.sh && chmod +x /app/start.sh
+echo "Processing PDFs..."\n\
+python embeddings/embed_pdfs.py || echo "PDF processing failed, continuing..."\n\
+echo "Starting FastAPI server..."\n\
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1' > /app/start.sh && chmod +x /app/start.sh
 
 # Expose FastAPI port
 EXPOSE 8000
