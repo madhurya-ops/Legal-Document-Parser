@@ -2,12 +2,12 @@ fastapi==0.110.2
 uvicorn==0.29.0
 pydantic==2.5.3
 requests==2.31.0
-langchain
+langchain==0.2.17
 faiss-cpu==1.8.0
 huggingface_hub==0.23.0
-langchain-huggingface
-langchain-community>=0.0.23
-pypdf
+langchain-huggingface==0.0.3
+langchain-community==0.2.19
+pypdf==5.6.0
 # Authentication and Database dependencies
 sqlalchemy==2.0.27
 psycopg2-binary==2.9.9
@@ -16,5 +16,7 @@ python-dotenv==1.0.0
 python-multipart==0.0.9
 python-jose[cryptography]==3.3.0
 email-validator==2.1.0
-# Memory optimization
+# Memory optimization - lighter versions
 numpy==1.24.3
+sentence-transformers==4.1.0
+transformers==4.41.2

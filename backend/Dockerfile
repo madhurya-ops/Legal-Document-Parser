@@ -13,11 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the backend code
 COPY . .
 
-# Create production start script
+# Create production start script with lightweight PDF processing
 RUN echo '#!/bin/bash\n\
 echo "Starting LegalDoc API..."\n\
-echo "Processing PDFs..."\n\
-python embeddings/embed_pdfs.py || echo "PDF processing failed, continuing..."\n\
+echo "Processing PDFs with lightweight mode..."\n\
+python embeddings/embed_pdfs_lightweight.py || echo "PDF processing failed, continuing..."\n\
 echo "Starting FastAPI server..."\n\
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1' > /app/start.sh && chmod +x /app/start.sh
 

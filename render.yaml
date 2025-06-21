@@ -3,7 +3,7 @@ services:
     name: legaldoc-backend
     env: python
     buildCommand: pip install -r backend/requirements.txt
-    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    startCommand: cd backend && python embeddings/embed_pdfs_lightweight.py && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -18,4 +18,4 @@ services:
 databases:
   - name: legaldoc-db
     databaseName: legaldoc
-    user: legaldoc 
+    user: legaldoc
