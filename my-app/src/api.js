@@ -25,4 +25,46 @@ export const sendQuery = async (payload) => {
   }
 };
 
+// Auth API helpers
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
+export const loginUser = async (email, password) => {
+  const response = await fetch(`${baseURL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  if (!response.ok) throw new Error((await response.json()).detail || 'Login failed');
+  return response.json();
+};
+
+export const signupUser = async (username, email, password) => {
+  const response = await fetch(`${baseURL}/auth/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, email, password })
+  });
+  if (!response.ok) throw new Error((await response.json()).detail || 'Signup failed');
+  return response.json();
+};
+
+export const getCurrentUser = async (token) => {
+  const response = await fetch(`${baseURL}/auth/me`, {
+    method: 'GET',
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  if (!response.ok) throw new Error('Invalid token');
+  return response.json();
+};
+
+export function storeToken(token) {
+  localStorage.setItem('access_token', token);
+}
+export function getToken() {
+  return localStorage.getItem('access_token');
+}
+export function clearToken() {
+  localStorage.removeItem('access_token');
+}
+
 export default sendQuery;

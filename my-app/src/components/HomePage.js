@@ -1,0 +1,235 @@
+import React, { useEffect, useState } from "react";
+import { Scale, Github, Loader2, Mail, FileText as ResumeIcon, ArrowRight } from "lucide-react";
+
+const tabs = [
+  "About",
+  "Features",
+  "Use Cases",
+  "Why LegalDoc",
+  "Tech Stack",
+  "FAQs",
+];
+
+const MAKERS = [
+  {
+    github: "https://github.com/Chai-B/Chai-B",
+    api: "https://api.github.com/users/Chai-B",
+    name: "Chaitanya Bansal",
+    bio: "Final year engineering student exploring AI/ML. Currently working on Legal Doc Interpretator. Learning LLM, LangChain, FastAPI, Streamlit.",
+    contact: "bansalchaitanya1234@gmail.com",
+    resume: "https://github.com/Chai-B/Chai-B/blob/main/resume.pdf",
+    projects: "https://github.com/Chai-B?tab=repositories"
+  },
+  {
+    github: "https://github.com/madhurya-ops/madhurya-ops",
+    api: "https://api.github.com/users/madhurya-ops",
+    name: "Madhurya Mishra",
+    bio: "Final year engineering student exploring AI/ML. Currently working on Legal Doc Interpreter. Learning LangChain, LLM, FastAPI, React.",
+    contact: "madhuryamishra@gmail.com",
+    resume: "https://github.com/madhurya-ops/Madhurya_Mishra/blob/main/Madhurya_Mishra_Resume.pdf",
+    projects: "https://github.com/madhurya-ops?tab=repositories"
+  }
+];
+
+export default function HomePage({ onGetStarted }) {
+  const [activeTab, setActiveTab] = useState("About");
+  const [profiles, setProfiles] = useState([null, null]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all(MAKERS.map(m => fetch(m.api).then(res => res.json()))).then(setProfiles).finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 bg-dots relative overflow-hidden transition-colors duration-300">
+      {/* Header with Tabs */}
+      <header className="fixed left-0 top-0 w-full z-50 flex items-center justify-between px-6 md:px-16 py-4 bg-white/40 dark:bg-slate-900/40 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 rounded-b-2xl">
+        <div className="flex items-center gap-3">
+          <Scale className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">LegalDoc</span>
+        </div>
+        <nav className="flex-1 flex justify-center gap-2 md:gap-4 ml-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${activeTab === tab ? "bg-blue-600 text-white shadow" : "bg-white/70 dark:bg-slate-800/70 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/40"}`}
+            >
+              {tab}
+            </button>
+          ))}
+        </nav>
+        <a
+          href="https://github.com/Chai-B/Legal-Document-Parser"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-6 py-2 rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold bg-white/80 dark:bg-slate-900/80 hover:bg-blue-50 dark:hover:bg-blue-800 transition-all duration-300 shadow-md text-base"
+        >
+          <Github className="w-5 h-5" /> GitHub
+        </a>
+      </header>
+
+      {/* Hero Section */}
+      <div className="px-6 md:px-20 py-12 text-center mt-24">
+        <h1 className="text-5xl font-extrabold text-blue-700 dark:text-blue-300 mb-6">AI-Powered Legal Document Interpreter</h1>
+        <p className="text-xl text-slate-700 dark:text-slate-300 max-w-4xl mx-auto">Upload, parse, and understand your legal documents instantly with AI. Extract obligations, penalties, dates, and clear summaries in plain English. Built for legal professionals, startups, and anyone dealing with contracts.</p>
+      </div>
+
+      {/* Tab Content */}
+      <div className="max-w-5xl mx-auto px-6 md:px-0 pb-16">
+        <div className="rounded-3xl bg-white/30 dark:bg-slate-900/30 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 p-8 md:p-12 space-y-8">
+          {activeTab === "About" && (
+            <section>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
+                About <span className="text-blue-700 dark:text-blue-400">LegalDoc</span>
+              </h2>
+              <p className="text-lg font-medium text-slate-900 dark:text-slate-100 mb-3">LegalDoc is a smart legal assistant platform that simplifies the interpretation of legal documents using AI. Designed for law firms, corporate legal teams, startups, and freelancers, it accelerates document review and clarifies complex clauses in plain English. Its AI extracts key obligations, penalties, deadlines, responsibilities, and actionable insights from PDF, DOCX, or TXT files within seconds.</p>
+              <p className="text-lg font-medium text-slate-900 dark:text-slate-100">LegalDoc also detects inconsistencies and risky clauses, delivering proactive recommendations. With enterprise-grade security, JWT authentication, encrypted storage, and an intuitive dashboard, it's a future-ready tool for modern legal professionals.</p>
+            </section>
+          )}
+          {activeTab === "Features" && (
+            <section>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
+                <span className="text-blue-700 dark:text-blue-400">Key Features</span>
+              </h2>
+              <ul className="list-disc pl-6 space-y-2">
+                <li className="text-base font-medium text-blue-700 dark:text-blue-400">Instant document parsing and AI-based clause extraction</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Summary generation with <span className='text-blue-700 dark:text-blue-400'>clear, actionable insights</span></li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Risk assessment of <span className='text-blue-700 dark:text-blue-400'>contractual clauses</span></li>
+                <li className="text-base font-medium text-blue-700 dark:text-blue-400">Real-time contract obligation reminders</li>
+                <li className="text-base font-medium text-blue-700 dark:text-blue-400">Legal chatbot for immediate answers on uploaded documents</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Support for <span className='text-blue-700 dark:text-blue-400'>PDF, DOCX, TXT</span> formats</li>
+                <li className="text-base font-medium text-blue-700 dark:text-blue-400">Dark mode and responsive modern UI</li>
+                <li className="text-base font-medium text-blue-700 dark:text-blue-400">Secure JWT-based authentication and user management</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Document dashboard with <span className='text-blue-700 dark:text-blue-400'>version history</span></li>
+                <li className="text-base font-medium text-blue-700 dark:text-blue-400">Custom tags, categories, and search features</li>
+              </ul>
+            </section>
+          )}
+          {activeTab === "Use Cases" && (
+            <section>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
+                <span className="text-blue-700 dark:text-blue-400">Use Cases</span>
+              </h2>
+              <ul className="list-disc pl-6 space-y-2">
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Startups validating vendor agreements and NDAs</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Law firms performing fast initial contract reviews</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Business teams extracting obligations and penalties from service contracts</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Freelancers reviewing client contracts</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">HR teams interpreting employment agreements</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Real estate firms analyzing lease agreements</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Corporate legal ops managing large-scale document libraries</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Compliance teams scanning for non-standard clauses</li>
+              </ul>
+            </section>
+          )}
+          {activeTab === "Why LegalDoc" && (
+            <section>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
+                Why Choose <span className="text-blue-700 dark:text-blue-400">LegalDoc?</span>
+              </h2>
+              <ul className="list-disc pl-6 space-y-2">
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">5x faster document reviews with AI-powered summaries</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Plain-English explanations of complex legal language</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">End-to-end document management from upload to chat-based queries</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Real-time deadline notifications and contract risk reports</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Enterprise-grade security with encrypted storage and JWT tokens</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Customizable tags, categories, and filters</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Modern, responsive, accessible interface with dark mode</li>
+              </ul>
+            </section>
+          )}
+          {activeTab === "Tech Stack" && (
+            <section>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
+                <span className="text-blue-700 dark:text-blue-400">Technology Stack</span>
+              </h2>
+              <ul className="list-disc pl-6 space-y-2">
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">React + Tailwind CSS frontend</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">FastAPI backend for rapid API services</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">PostgreSQL for document metadata storage</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">LangChain orchestration for LLM pipelines</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Hugging Face models for AI document parsing</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">Docker-based containerization for scalable deployments</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300">JWT and bcrypt for authentication and security</li>
+              </ul>
+            </section>
+          )}
+          {activeTab === "FAQs" && (
+            <section>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
+                <span className="text-blue-700 dark:text-blue-400">Frequently Asked Questions</span>
+              </h2>
+              <ul className="list-disc pl-6 space-y-2">
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300"><strong>Which formats are supported?</strong> — PDF, DOCX, and TXT files.</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300"><strong>Is my data secure?</strong> — Yes, documents are encrypted and secured with JWT-based authentication.</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300"><strong>Does it provide legal advice?</strong> — No, it simplifies legal text and provides AI-based summaries and risk highlights.</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300"><strong>Can I customize clause extraction rules?</strong> — Customization features are planned for enterprise plans.</li>
+                <li className="text-base font-medium text-slate-700 dark:text-slate-300"><strong>Is there a chatbot?</strong> — Yes, for legal queries on your uploaded documents.</li>
+              </ul>
+            </section>
+          )}
+        </div>
+      </div>
+
+      {/* About the Makers Section */}
+      <div className="max-w-5xl mx-auto px-6 md:px-0 py-5 animate-fade-in-up">
+        <div className="rounded-3xl bg-white/30 dark:bg-slate-900/30 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 p-8 md:p-12">
+          <h3 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-8 text-center tracking-tight">
+            About the <span className="text-blue-700 dark:text-blue-400">Makers</span>
+          </h3>
+          {loading ? (
+            <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 justify-center"><Loader2 className="animate-spin w-5 h-5" /> Loading profiles...</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {MAKERS.map((maker, i) => (
+                <div key={maker.github} className="flex flex-col items-center shadow-lg p-6 animate-fade-in-up">
+                  <img
+                    src={profiles[i]?.avatar_url || "https://avatars.githubusercontent.com/u/9919?v=4"}
+                    alt="GitHub Avatar"
+                    className="w-24 h-24 rounded-full shadow-md mb-4"
+                  />
+                  <span className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-1">{profiles[i]?.name || maker.name}</span>
+                  <span className="text-base font-medium text-slate-700 dark:text-slate-300 mb-2 text-center">{maker.bio}</span>
+                  <div className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300 mb-2">
+                    <a href={maker.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:underline"><Github className="w-4 h-4" /> GitHub</a>
+                    <a href={maker.projects} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:underline"><ResumeIcon className="w-4 h-4" /> Projects</a>
+                    <a href={maker.resume} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:underline"><ResumeIcon className="w-4 h-4" /> Resume</a>
+                    <a href={`mailto:${maker.contact}`} className="inline-flex items-center gap-2 hover:underline"><Mail className="w-4 h-4" /> {maker.contact}</a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Floating Chat Input/Button */}
+      <div className="fixed left-1/2 bottom-8 -translate-x-1/2 z-50 w-full max-w-2xl px-4 animate-fade-in-up">
+        <div className="backdrop-blur-lg bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl px-6 py-4 flex flex-col items-center gap-2">
+          <div className="w-full flex flex-row items-center gap-2">
+            <input
+              type="text"
+              className="flex-1 rounded-xl border border-slate-300 dark:border-slate-600 bg-white/40 dark:bg-slate-800/40 px-4 py-3 text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm cursor-pointer backdrop-blur-md"
+              placeholder="Ask about legal matters, case law, or your document..."
+              onFocus={onGetStarted}
+              readOnly
+            />
+            <a
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold bg-white/80 dark:bg-slate-900/80 hover:bg-blue-50 dark:hover:bg-blue-800 transition-all duration-300 shadow-lg text-lg cursor-pointer"
+              onClick={onGetStarted}
+            >
+              Get Started <ArrowRight className="ml-2 w-5 h-5" />
+            </a>
+          </div>
+          <span className="text-xs text-slate-500 dark:text-slate-400 text-center">Sign in to start chatting</span>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="w-full py-6 text-center text-slate-500 dark:text-slate-400 text-sm bg-white/80 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-700 mt-auto">
+        © {new Date().getFullYear()} LegalDoc · Built with ♥ by Chaitanya Bansal & Madhurya Mishra
+      </footer>
+    </div>
+  );
+} 

@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   db:
     image: postgres:15
@@ -31,12 +30,12 @@ services:
         condition: service_healthy
 
   frontend:
-    build: ./my-app
+    build:
+      context: ./my-app
+      args:
+        - REACT_APP_API_URL=http://localhost:8000
     ports:
       - "3000:80"
-    # Uncomment and set if you want to pass backend URL to frontend at build time:
-    # environment:
-    #   - REACT_APP_API_URL=http://localhost:8000
 
 volumes:
   postgres_data:

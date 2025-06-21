@@ -1,18 +1,45 @@
-import React, { useState, useMemo, Suspense, lazy } from "react";
+import React, { useState, useMemo, Suspense, lazy, useEffect } from "react";
 // Lazy load heavy components
 const FileUpload = lazy(() => import("./components/FileUpload"));
 const ChatInterface = lazy(() => import("./components/ChatInterface"));
 import ThemeToggle from "./components/ThemeToggle";
 import { Card } from "./components/ui/card";
 import { Badge } from "./components/ui/badge";
-import { Scale, FileText, MessageSquare, X, Search } from "lucide-react";
+import { Scale, FileText, MessageSquare, X, Search, LogOut } from "lucide-react";
 import "./App.css";
+import AuthPage from "./components/AuthPage";
+import HomePage from "./components/HomePage";
+import { getToken, getCurrentUser, clearToken } from "./api";
 
 export default function App() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [messages, setMessages] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [showAuth, setShowAuth] = useState(false);
+  const [showHome, setShowHome] = useState(true);
+
+  // Check authentication on mount
+  useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      setAuthLoading(false);
+      return;
+    }
+    getCurrentUser(token)
+      .then((u) => {
+        setUser(u);
+        setShowHome(false);
+      })
+      .catch(() => {
+        clearToken();
+        setUser(null);
+        setShowHome(true);
+      })
+      .finally(() => setAuthLoading(false));
+  }, []);
 
   // Filter documents based on search query
   const filteredDocuments = useMemo(() => {
@@ -22,7 +49,7 @@ export default function App() {
 
   const handleFileUpload = (file) => {
     setUploadedFiles((prev) => [...prev, file]);
-    setSelectedDocument(file); // auto-select latest
+    setSelectedDocument(file);
   };
 
   const removeFile = (index) => {
@@ -32,8 +59,35 @@ export default function App() {
     }
   };
 
+  const handleLogout = () => {
+    clearToken();
+    setUser(null);
+    setShowHome(true);
+    setShowAuth(false);
+  };
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-slate-50 dark:bg-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (showHome && !user) {
+    return <HomePage onGetStarted={() => { setShowAuth(true); setShowHome(false); }} />;
+  }
+
+  if (showAuth && !user) {
+    return <AuthPage onAuthSuccess={(u) => { setUser(u); setShowAuth(false); setShowHome(false); }} />;
+  }
+
+  if (!user) {
+    return <HomePage onGetStarted={() => { setShowAuth(true); setShowHome(false); }} />;
+  }
+
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300"> 
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300 fade-in-home">
       {/* Sidebar */}
       <div className="w-72 flex flex-col h-200 m-4 rounded-2xl shadow-2xl backdrop-blur-md bg-white/80 dark:bg-slate-900/80 bg-dots border border-slate-200 dark:border-slate-700">
         {/* AppHeader */}
@@ -45,7 +99,16 @@ export default function App() {
               <div className="text-xs text-slate-500 dark:text-slate-400">Document Analysis</div>
             </div>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={handleLogout}
+              title="Logout"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 h-10 w-10 rounded-full p-0"
+            >
+              <LogOut className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            </button>
+          </div>
         </div>
         {/* UploadBox */}
         <div className="p-2">
