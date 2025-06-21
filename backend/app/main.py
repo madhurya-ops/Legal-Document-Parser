@@ -37,3 +37,7 @@ app.include_router(routes.router)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to LegalDoc API with Authentication"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "LegalDoc API"}
