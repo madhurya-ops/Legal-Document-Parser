@@ -43,7 +43,7 @@ export default function HomePage({ onGetStarted }) {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 bg-dots relative overflow-hidden transition-colors duration-300">
       {/* Header with Tabs */}
-      <header className="fixed left-0 top-0 w-full z-50 flex items-center justify-between px-6 md:px-16 py-4 bg-white/40 dark:bg-slate-900/40 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 rounded-b-2xl">
+      <header className="fixed left-0 top-0 w-full z-50 flex items-center justify-between px-2 sm:px-4 md:px-16 py-3 sm:py-4 bg-white/40 dark:bg-slate-900/40 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 rounded-b-2xl">
         <div className="flex items-center gap-3">
           <Scale className="w-8 h-8 text-blue-600 dark:text-blue-400" />
           <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">LegalDoc</span>
@@ -70,14 +70,14 @@ export default function HomePage({ onGetStarted }) {
       </header>
 
       {/* Hero Section */}
-      <div className="px-6 md:px-20 py-12 text-center mt-24">
+      <div className="px-2 sm:px-6 md:px-20 py-8 sm:py-12 text-center mt-24">
         <h1 className="text-5xl font-extrabold text-blue-700 dark:text-blue-300 mb-6">AI-Powered Legal Document Interpreter</h1>
         <p className="text-xl text-slate-700 dark:text-slate-300 max-w-4xl mx-auto">Upload, parse, and understand your legal documents instantly with AI. Extract obligations, penalties, dates, and clear summaries in plain English. Built for legal professionals, startups, and anyone dealing with contracts.</p>
       </div>
 
       {/* Tab Content */}
-      <div className="max-w-5xl mx-auto px-6 md:px-0 pb-16">
-        <div className="rounded-3xl bg-white/30 dark:bg-slate-900/30 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 p-8 md:p-12 space-y-8">
+      <div className="max-w-5xl mx-auto px-2 sm:px-4 md:px-0 pb-10 sm:pb-16">
+        <div className="rounded-3xl bg-white/30 dark:bg-slate-900/30 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 p-4 sm:p-8 md:p-12 space-y-6 sm:space-y-8">
           {activeTab === "About" && (
             <section>
               <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
@@ -173,15 +173,15 @@ export default function HomePage({ onGetStarted }) {
       </div>
 
       {/* About the Makers Section */}
-      <div className="max-w-5xl mx-auto px-6 md:px-0 py-5 animate-fade-in-up">
-        <div className="rounded-3xl bg-white/30 dark:bg-slate-900/30 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 p-8 md:p-12">
+      <div className="max-w-5xl mx-auto px-2 sm:px-4 md:px-0 py-3 sm:py-5 animate-fade-in-up">
+        <div className="rounded-3xl bg-white/30 dark:bg-slate-900/30 backdrop-blur-lg shadow-2xl border border-white/60 dark:border-slate-700 p-4 sm:p-8 md:p-12">
           <h3 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-8 text-center tracking-tight">
             About the <span className="text-blue-700 dark:text-blue-400">Makers</span>
           </h3>
           {loading ? (
             <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 justify-center"><Loader2 className="animate-spin w-5 h-5" /> Loading profiles...</div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
               {MAKERS.map((maker, i) => (
                 <div key={maker.github} className="flex flex-col items-center shadow-lg p-6 animate-fade-in-up">
                   <img
@@ -205,18 +205,18 @@ export default function HomePage({ onGetStarted }) {
       </div>
 
       {/* Floating Chat Input/Button */}
-      <div className="fixed left-1/2 bottom-8 -translate-x-1/2 z-50 w-full max-w-2xl px-4 animate-fade-in-up">
-        <div className="backdrop-blur-lg bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl px-6 py-4 flex flex-col items-center gap-2">
-          <div className="w-full flex flex-row items-center gap-2">
+      <div className="fixed left-1/2 bottom-4 sm:bottom-8 -translate-x-1/2 z-50 w-full max-w-lg sm:max-w-2xl px-2 sm:px-4 animate-fade-in-up">
+        <div className="backdrop-blur-lg bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl px-3 sm:px-6 py-3 sm:py-4 flex flex-col items-center gap-2">
+          <div className="w-full flex flex-col sm:flex-row items-center gap-2">
             <input
               type="text"
-              className="flex-1 rounded-xl border border-slate-300 dark:border-slate-600 bg-white/40 dark:bg-slate-800/40 px-4 py-3 text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm cursor-pointer backdrop-blur-md"
+              className="flex-1 rounded-xl border border-slate-300 dark:border-slate-600 bg-white/40 dark:bg-slate-800/40 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm cursor-pointer backdrop-blur-md"
               placeholder="Ask about legal matters, case law, or your document..."
               onFocus={onGetStarted}
               readOnly
             />
             <a
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold bg-white/80 dark:bg-slate-900/80 hover:bg-blue-50 dark:hover:bg-blue-800 transition-all duration-300 shadow-lg text-lg cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold bg-white/80 dark:bg-slate-900/80 hover:bg-blue-50 dark:hover:bg-blue-800 transition-all duration-300 shadow-lg text-base sm:text-lg cursor-pointer"
               onClick={onGetStarted}
             >
               Get Started <ArrowRight className="ml-2 w-5 h-5" />
