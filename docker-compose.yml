@@ -1,13 +1,34 @@
 version: '3.8'
 services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build: ./backend
     ports:
       - "8000:8000"
     environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/auth_db
+      - SECRET_KEY=your-super-secret-key-change-this-in-production
       - HF_API_KEY=${HF_API_KEY}
     volumes:
       - ./index:/app/index
+    depends_on:
+      db:
+        condition: service_healthy
 
   frontend:
     build: ./my-app
@@ -16,3 +37,6 @@ services:
     # Uncomment and set if you want to pass backend URL to frontend at build time:
     # environment:
     #   - REACT_APP_API_URL=http://localhost:8000
+
+volumes:
+  postgres_data:
