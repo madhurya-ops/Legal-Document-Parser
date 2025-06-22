@@ -1,6 +1,6 @@
 // Sends a question to the FastAPI backend and returns the answer
 export const sendQuery = async (payload) => {
-  const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const baseURL = (process.env.REACT_APP_API_URL || 'http://localhost:8000').replace(/\/+$/, '');
   try {
     const response = await fetch(`${baseURL}/ask`, {
       method: 'POST',
@@ -26,7 +26,7 @@ export const sendQuery = async (payload) => {
 };
 
 // Auth API helpers
-const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const baseURL = (process.env.REACT_APP_API_URL || 'http://localhost:8000').replace(/\/+$/, '');
 
 export const loginUser = async (email, password) => {
   const response = await fetch(`${baseURL}/auth/login`, {
