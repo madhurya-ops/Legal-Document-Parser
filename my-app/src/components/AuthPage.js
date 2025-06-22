@@ -18,7 +18,7 @@ function parseErrorMessage(err, mode) {
   return msg;
 }
 
-export default function AuthPage({ onAuthSuccess }) {
+export default function AuthPage({ onAuthSuccess, onBack }) {
   const [mode, setMode] = useState("login"); // 'login' or 'signup'
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -76,6 +76,17 @@ export default function AuthPage({ onAuthSuccess }) {
       {/* Auth card */}
       <div className="flex flex-1 items-center justify-center relative z-20">
         <Card className="w-full max-w-md mx-auto shadow-2xl rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-lg animate-slide-in-up relative overflow-hidden">
+          {/* Back button */}
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="absolute top-4 left-4 z-30 p-2 rounded-full bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow hover:bg-blue-50 dark:hover:bg-blue-900/40 transition-colors"
+              title="Back to Home"
+              aria-label="Back to Home"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-blue-600 dark:text-blue-400"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+          )}
           <CardContent className="p-8 sm:p-10 flex flex-col gap-7">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">

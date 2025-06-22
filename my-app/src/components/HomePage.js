@@ -45,10 +45,15 @@ export default function HomePage({ onGetStarted }) {
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 bg-dots relative overflow-hidden transition-colors duration-300">
       {/* Header with Tabs */}
       <header className="fixed left-0 top-0 w-full z-50 flex items-center justify-between px-2 sm:px-4 md:px-16 py-3 sm:py-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg shadow-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-b-2xl">
-        <div className="flex items-center gap-3">
+        <button
+          className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg px-1 py-1 hover:bg-blue-50 dark:hover:bg-blue-900/40 transition-colors"
+          onClick={() => setActiveTab('About')}
+          title="About LegalDoc"
+          aria-label="About LegalDoc"
+        >
           <Scale className="w-8 h-8 text-blue-600 dark:text-blue-400" />
           <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">LegalDoc</span>
-        </div>
+        </button>
         <nav className="flex-1 flex justify-center gap-2 md:gap-4 ml-8">
           {tabs.map((tab) => (
             <button

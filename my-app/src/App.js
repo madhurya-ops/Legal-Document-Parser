@@ -66,6 +66,24 @@ export default function App() {
     setShowAuth(false);
   };
 
+  // Persist chat messages in localStorage
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('chat_messages', JSON.stringify(messages));
+    }
+  }, [messages, user]);
+
+  useEffect(() => {
+    if (user) {
+      const saved = localStorage.getItem('chat_messages');
+      if (saved) {
+        try {
+          setMessages(JSON.parse(saved));
+        } catch {}
+      }
+    }
+  }, [user]);
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-50 dark:bg-slate-900">
@@ -79,7 +97,7 @@ export default function App() {
   }
 
   if (showAuth && !user) {
-    return <AuthPage onAuthSuccess={(u) => { setUser(u); setShowAuth(false); setShowHome(false); }} />;
+    return <AuthPage onAuthSuccess={(u) => { setUser(u); setShowAuth(false); setShowHome(false); }} onBack={() => { setShowHome(true); setShowAuth(false); }} />;
   }
 
   if (!user) {
