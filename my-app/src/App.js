@@ -89,14 +89,14 @@ export default function App() {
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300 fade-in-home">
       {/* Sidebar */}
-      <div className="w-72 flex flex-col h-200 m-4 rounded-2xl shadow-2xl backdrop-blur-md bg-white/80 dark:bg-slate-900/80 bg-dots border border-slate-200 dark:border-slate-700">
+      <div className="w-72 flex flex-col h-200 m-4 rounded-2xl shadow-2xl backdrop-blur-md bg-white/90 dark:bg-slate-900/90 bg-dots border border-slate-200 dark:border-slate-700">
         {/* AppHeader */}
-        <div className="p-4 flex items-center justify-between rounded-2xl shadow-2xl backdrop-blur-md bg-white/80 dark:bg-slate-900/80 bg-dots mb-2">
+        <div className="p-4 flex items-center justify-between rounded-2xl shadow-2xl backdrop-blur-md bg-white/90 dark:bg-slate-900/90 bg-dots mb-2">
           <div className="flex items-center gap-3">
             <Scale className="w-7 h-7 text-blue-600 dark:text-blue-400" />
             <div>
-              <span className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">LegalAI</span>
-              <div className="text-xs text-slate-500 dark:text-slate-400">Document Analysis</div>
+              <span className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">LegalDoc</span>
+              <div className="text-xs text-slate-600 dark:text-slate-400">Document Analysis</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export default function App() {
             <button
               onClick={handleLogout}
               title="Logout"
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 h-10 w-10 rounded-full p-0"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/90 h-10 w-10 rounded-full p-0 shadow-sm hover:shadow-md"
             >
               <LogOut className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </button>
@@ -118,15 +118,15 @@ export default function App() {
         </div>
         {/* SearchBar & Document List (Scrollable, sticky search) */}
         <div className="flex-1 flex flex-col p-4 overflow-y-auto">
-          <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 pb-2">
+          <div className="sticky top-0 z-10 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm pb-2">
             <div className="relative mb-2">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400" />
               <input
                 type="text"
                 placeholder="Search documents..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-3 py-2 w-full rounded-md border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="pl-9 pr-3 py-2 w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white/80 dark:bg-slate-800/80 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-slate-500 dark:placeholder-slate-400"
               />
             </div>
             <div className="flex items-center justify-between mb-2">
@@ -135,7 +135,7 @@ export default function App() {
               </h3>
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-3 mt-1">
             {filteredDocuments.length === 0 ? (
               <div className="text-center py-8">
                 <FileText className="h-8 w-8 text-slate-400 mx-auto mb-2" />
@@ -145,11 +145,11 @@ export default function App() {
               filteredDocuments.map((file, index) => (
                 <Card
                   key={index}
-                  className={`p-3 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors flex items-center justify-between ${selectedDocument === file ? 'ring-2 ring-blue-500' : ''}`}
+                  className={`p-3 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors flex items-center justify-between mb-2 ${selectedDocument === file ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' : ''}`}
                   onClick={() => setSelectedDocument(file)}
                 >
                   <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <FileText className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                    <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">{file.name}</p>
                       <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -173,7 +173,7 @@ export default function App() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-screen bg-slate-50 dark:bg-slate-900">
         {/* MainHeader */}
-        <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
           <div className="flex items-center gap-3">
             <MessageSquare className="h-5 w-5 text-slate-600 dark:text-slate-400" />
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Legal Document Analysis</h2>

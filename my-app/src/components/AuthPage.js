@@ -60,10 +60,10 @@ export default function AuthPage({ onAuthSuccess }) {
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-900 fade-in-home transition-colors duration-300 bg-dots relative overflow-hidden">
       {/* Left illustration/branding panel (hidden on mobile) */}
-      <div className="hidden md:flex flex-col justify-between items-center w-1/2 bg-gradient-to-br from-blue-100/80 via-blue-200/60 to-blue-300/40 dark:from-blue-900/60 dark:via-slate-900/80 dark:to-blue-950/80 p-10 relative z-10 animate-slide-in-left">
+      <div className="hidden md:flex flex-col justify-between items-center w-1/2 bg-gradient-to-br from-blue-50/90 via-blue-100/80 to-blue-200/60 dark:from-blue-900/60 dark:via-slate-900/80 dark:to-blue-950/80 p-10 relative z-10 animate-slide-in-left">
         <div className="flex flex-col items-center gap-4 mt-10">
           <Scale className="w-16 h-16 text-blue-600 dark:text-blue-400 drop-shadow-lg" />
-          <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight drop-shadow-lg">LegalAI</span>
+          <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight drop-shadow-lg">LegalDoc</span>
           <span className="text-lg text-slate-600 dark:text-slate-300 text-center max-w-xs">AI-powered legal document analysis, secure and effortless.</span>
         </div>
         <div className="flex flex-col items-center gap-2 mb-10">
@@ -75,12 +75,12 @@ export default function AuthPage({ onAuthSuccess }) {
       <div className="absolute inset-0 pointer-events-none bg-dots opacity-60 dark:opacity-40 animate-fade-in" />
       {/* Auth card */}
       <div className="flex flex-1 items-center justify-center relative z-20">
-        <Card className="w-full max-w-md mx-auto shadow-2xl rounded-3xl bg-white/70 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 backdrop-blur-lg animate-slide-in-up relative overflow-hidden">
+        <Card className="w-full max-w-md mx-auto shadow-2xl rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-lg animate-slide-in-up relative overflow-hidden">
           <CardContent className="p-8 sm:p-10 flex flex-col gap-7">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">
                 <Scale className="w-7 h-7 text-blue-600 dark:text-blue-400" />
-                <span className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">LegalAI</span>
+                <span className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">LegalDoc</span>
               </div>
               <ThemeToggle />
             </div>
@@ -99,7 +99,7 @@ export default function AuthPage({ onAuthSuccess }) {
                     required
                     value={form.username}
                     onChange={handleChange}
-                    className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 px-4 py-3 text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white/80 dark:bg-slate-800/80 px-4 py-3 text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm"
                     placeholder="Your username"
                   />
                 </div>
@@ -114,7 +114,7 @@ export default function AuthPage({ onAuthSuccess }) {
                   required
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 px-4 py-3 text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white/80 dark:bg-slate-800/80 px-4 py-3 text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm"
                   placeholder="you@example.com"
                 />
               </div>
@@ -128,7 +128,7 @@ export default function AuthPage({ onAuthSuccess }) {
                   required
                   value={form.password}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 px-4 py-3 text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm pr-12"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white/80 dark:bg-slate-800/80 px-4 py-3 text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-colors duration-300 shadow-sm pr-12"
                   placeholder={mode === "login" ? "Your password" : "Create a password"}
                 />
                 <button

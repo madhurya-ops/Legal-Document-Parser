@@ -93,11 +93,11 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center max-w-md mx-auto">
                     <Scale className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-slate-600 dark:text-slate-400 mb-2">Welcome to LegalAI Document Analyzer</h3>
+                    <h3 className="text-lg font-medium text-slate-600 dark:text-slate-400 mb-2">Welcome to LegalDoc Document Analyzer</h3>
                     <p className="text-slate-600 dark:text-slate-400 mb-6">
                       Upload your legal documents and ask questions to get AI-powered analysis, summaries, and insights.
                     </p>
-                    <div className="flex flex-col items-center gap-2 text-sm text-slate-600">
+                    <div className="flex flex-col items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                       <div className="flex items-center gap-2">
                         <FileText className="h-4 w-4" />
                         <span>Contract analysis and review</span>
@@ -126,11 +126,11 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
                     </div>
                   )}
                   <div
-                      className={"max-w-[85%] sm:max-w-[80%] rounded-2xl p-3 sm:p-4 shadow-sm transition-all duration-300 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-600"}
+                      className={"max-w-[85%] sm:max-w-[80%] rounded-2xl p-3 sm:p-4 shadow-sm transition-all duration-300 bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 border border-slate-200/60 dark:border-slate-600/60 backdrop-blur-sm"}
                   >
                     <div className="whitespace-pre-wrap text-sm sm:text-base leading-relaxed">{message.content}</div>
                     {message.sources && message.sources.length > 0 && (
-                      <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-600">
+                      <div className="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-600/60">
                         <div className="flex items-center gap-2 mb-2">
                           <Scale className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
                           <p className="text-xs font-medium text-slate-600 dark:text-slate-400">Relevant Cases:</p>
@@ -139,7 +139,7 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
                           {message.sources.map((source, index) => (
                             <Badge
                               key={index}
-                              className="text-xs bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600"
+                              className="text-xs bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-300/60 dark:border-slate-600/60"
                             >
                               {source}
                             </Badge>
@@ -162,7 +162,7 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
                     <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <div className="bg-slate-100 dark:bg-slate-700 rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-600 transition-colors duration-300">
+                  <div className="bg-white/90 dark:bg-slate-700/90 rounded-2xl p-3 sm:p-4 border border-slate-200/60 dark:border-slate-600/60 transition-colors duration-300 backdrop-blur-sm">
                     <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
                       <span className="text-sm text-slate-600 dark:text-slate-400">AI is thinking...</span>
@@ -175,7 +175,7 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
         </div>
         {/* Input box (floating, translucent) */}
         <div className="absolute left-0 right-0 bottom-6 z-20 flex justify-center pointer-events-none bg-dots">
-          <div className="backdrop-blur-md bg-white/80 dark:bg-slate-800/80 bg-dots shadow-2xl rounded-2xl px-4 py-2 sm:px-6 sm:py-3 max-w-4xl w-[98%] pointer-events-auto border border-slate-200 dark:border-slate-700">
+          <div className="backdrop-blur-md bg-white/90 dark:bg-slate-800/90 bg-dots shadow-2xl rounded-2xl px-4 py-2 sm:px-6 sm:py-3 max-w-4xl w-[98%] pointer-events-auto border border-slate-200/60 dark:border-slate-700/60">
             <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3 items-end">
             <Textarea
                 id="chat-input"

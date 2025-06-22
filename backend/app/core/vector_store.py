@@ -2,7 +2,6 @@ from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 import os
 import pickle
-import gc
 
 # Use lighter embedding model
 try:
@@ -82,17 +81,7 @@ def get_retriever(k=5):
     except Exception as e:
         print(f"Error loading vector store: {e}")
         # Return a simple retriever that returns empty results
-        try:
-            from langchain.schema import Document
-            empty_docs = [Document(page_content="", metadata={})]
-            db = FAISS.from_documents(empty_docs, embedding_model)
-            return db.as_retriever(search_kwargs={"k": k})
-        except Exception as e2:
-            print(f"Failed to create fallback retriever: {e2}")
-            # Return a dummy retriever
-            class DummyRetriever:
-                def get_relevant_documents(self, query):
-                    return []
-                def as_retriever(self, search_kwargs=None):
-                    return self
-            return DummyRetriever().as_retriever(search_kwargs={"k": k})
+        from langchain.schema import Document
+        empty_docs = [Document(page_content="", metadata={})]
+        db = FAISS.from_documents(empty_docs, embedding_model)
+        return db.as_retriever(search_kwargs={"k": k})

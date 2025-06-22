@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, validator, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
 from datetime import datetime
 import uuid
@@ -9,18 +9,6 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    
-    @validator('password')
-    def validate_password(cls, v):
-        if len(v) < 8:
-            raise ValueError('Password must be at least 8 characters long')
-        if not any(c.isupper() for c in v):
-            raise ValueError('Password must contain at least one uppercase letter')
-        if not any(c.islower() for c in v):
-            raise ValueError('Password must contain at least one lowercase letter')
-        if not any(c.isdigit() for c in v):
-            raise ValueError('Password must contain at least one digit')
-        return v
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -38,4 +26,30 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    email: Optional[str] = None 
+    email: Optional[str] = None
+
+# Document schemas
+class DocumentBase(BaseModel):
+    original_filename: str
+    file_size: str
+    file_type: str
+
+class DocumentCreate(DocumentBase):
+    filename: str
+    file_hash: str
+    user_id: uuid.UUID
+
+class DocumentResponse(DocumentBase):
+    id: uuid.UUID
+    filename: str
+    file_hash: str
+    user_id: uuid.UUID
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class DocumentUploadResponse(BaseModel):
+    message: str
+    document: Optional[DocumentResponse] = None
+    is_duplicate: bool = False 

@@ -16,12 +16,12 @@ export default function ThemeToggle() {
       size="icon"
       aria-label="Toggle theme"
       onClick={toggleTheme}
-      className="rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-300"
+      className="rounded-full border border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700/90 transition-all duration-300 shadow-sm hover:shadow-md"
     >
-      {theme === "dark" ? (
-        <Sun className="w-5 h-5 text-yellow-400" />
+      {theme === "light" ? (
+        <Sun className="w-5 h-5 text-amber-500" />
       ) : (
-        <Moon className="w-5 h-5 text-slate-700" />
+        <Moon className="w-5 h-5 text-slate-600" />
       )}
     </Button>
   );

@@ -1,16 +1,30 @@
 import os
+import sys
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import pickle
 import gc
-import sys
-from pdf_config import get_config
 
-# Get configuration based on deployment tier
-config = get_config('free')  # Change to 'paid' for more generous limits
+# Fix import path for pdf_config
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+try:
+    from pdf_config import get_config
+    # Get configuration based on deployment tier
+    config = get_config('free')  # Change to 'paid' for more generous limits
+except ImportError:
+    print("Warning: pdf_config not found, using default conservative settings")
+    # Default conservative settings for Render free tier
+    config = {
+        'MAX_PDF_SIZE_MB': 2,  # Even more conservative
+        'MAX_PAGES': 3,
+        'MAX_CHUNKS': 30,
+        'MAX_CHUNKS_PER_PAGE': 3,
+        'CHUNK_SIZE': 100,
+        'BATCH_SIZE': 3
+    }
 
 # Settings - Ultra lightweight with configurable limits
-pdf_folder = "pdfs"
+pdf_folder = "uploads"  # Changed from "pdfs" to "uploads"
 index_path = "index"
 MAX_PDF_SIZE_MB = config['MAX_PDF_SIZE_MB']
 MAX_PAGES = config['MAX_PAGES']
@@ -29,34 +43,56 @@ def get_file_size_mb(filepath):
 
 def process_and_store_pdfs_lightweight():
     """Lightweight PDF processing with strict limits"""
-    pdf_files = [f for f in os.listdir(pdf_folder) if f.endswith(".pdf")]
-    print(f"Found {len(pdf_files)} PDFs.")
+    # Check if uploads directory exists
+    if not os.path.exists(pdf_folder):
+        print(f"Uploads directory '{pdf_folder}' does not exist. Creating it...")
+        os.makedirs(pdf_folder)
+        print("No documents to process.")
+        return
+    
+    pdf_files = [f for f in os.listdir(pdf_folder) if f.endswith(('.pdf', '.docx', '.txt'))]
+    print(f"Found {len(pdf_files)} documents in uploads folder.")
     print(f"Using limits: {MAX_PDF_SIZE_MB}MB max, {MAX_PAGES} pages, {MAX_CHUNKS} chunks")
 
     if not pdf_files:
-        print("No PDFs to process.")
+        print("No documents to process.")
         return
 
     documents = []
     total_chunks = 0
     processed_files = 0
     
-    # Process one PDF at a time with strict limits
-    for filename in tqdm(pdf_files, desc="Processing PDFs"):
+    # Process one document at a time with strict limits
+    for filename in tqdm(pdf_files, desc="Processing documents"):
         try:
             filepath = os.path.join(pdf_folder, filename)
             file_size = get_file_size_mb(filepath)
             
-            # Skip large PDFs
+            # Skip large files
             if file_size > MAX_PDF_SIZE_MB:
                 print(f"Skipping {filename} - too large ({file_size:.1f}MB > {MAX_PDF_SIZE_MB}MB)")
                 continue
                 
             print(f"Processing {filename} ({file_size:.1f}MB)...")
             
-            # Load PDF with page limit
-            loader = PyPDFLoader(filepath)
-            pages = loader.load()
+            # Load document with page limit
+            try:
+                if filename.endswith('.pdf'):
+                    loader = PyPDFLoader(filepath)
+                    pages = loader.load()
+                elif filename.endswith('.txt'):
+                    # Handle text files
+                    with open(filepath, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    from langchain.schema import Document
+                    pages = [Document(page_content=content, metadata={"source": filename})]
+                else:
+                    # Skip unsupported file types for now
+                    print(f"Skipping {filename} - unsupported file type")
+                    continue
+            except Exception as e:
+                print(f"Error loading {filename}: {e}")
+                continue
             
             # Limit pages
             if len(pages) > MAX_PAGES:
@@ -111,7 +147,7 @@ def process_and_store_pdfs_lightweight():
             continue
 
     if documents:
-        print(f"Successfully processed {len(documents)} chunks from {processed_files} PDFs")
+        print(f"Successfully processed {len(documents)} chunks from {processed_files} documents")
         
         # Create minimal index
         try:

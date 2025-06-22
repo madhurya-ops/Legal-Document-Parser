@@ -14,16 +14,14 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)) -> Any:
     Create a new user account
     """
     # Check if user with email already exists
-    db_user = crud.get_user_by_email(db, email=user.email)
-    if db_user:
+    if crud.get_user_by_email(db, email=user.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
     
     # Check if username already exists
-    db_user = crud.get_user_by_username(db, username=user.username)
-    if db_user:
+    if crud.get_user_by_username(db, username=user.username):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already taken"

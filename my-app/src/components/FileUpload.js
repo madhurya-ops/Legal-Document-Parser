@@ -41,7 +41,7 @@ export default function FileUpload({ onFileUpload, selectedDocument, boxSize }) 
         className={`border-2 border-dashed transition-all duration-300 cursor-pointer hover:scale-[1.01] aspect-[2/1.4] min-h-[112px] w-full flex items-center justify-center ${
           isDragging
             ? "border-blue-400 bg-blue-50 dark:bg-blue-900/20 scale-[1.01]"
-            : "border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-slate-50 dark:bg-slate-800/50"
+            : "border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-white/80 dark:bg-slate-800/80"
         } ${boxSize === 'small' ? 'p-2' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -74,7 +74,7 @@ export default function FileUpload({ onFileUpload, selectedDocument, boxSize }) 
         </CardContent>
       </Card>
       {selectedDocument && (
-        <Card className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 animate-slide-in">
+        <Card className="bg-white/90 dark:bg-slate-800/90 border border-slate-200/60 dark:border-slate-700/60 shadow-sm transition-all duration-300 animate-slide-in backdrop-blur-sm">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="p-2 sm:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg transition-colors duration-300">
@@ -90,7 +90,7 @@ export default function FileUpload({ onFileUpload, selectedDocument, boxSize }) 
               </div>
               <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg">
+            <div className="mt-3 p-3 bg-blue-50/80 dark:bg-blue-900/20 border border-blue-200/60 dark:border-blue-800/60 rounded-lg">
               <p className="text-blue-700 dark:text-blue-300 text-sm">
                 File upload is for local context only. No file is sent to the backend.
               </p>

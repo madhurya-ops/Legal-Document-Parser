@@ -42,17 +42,6 @@ def verify_access_token(token: str, credentials_exception: HTTPException) -> str
     except JWTError:
         raise credentials_exception
 
-def verify_token(token: str) -> Optional[str]:
-    """Verify JWT token and return email (legacy function)"""
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: Optional[str] = payload.get("sub")
-        if email is None:
-            return None
-        return email
-    except JWTError:
-        return None
-
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
