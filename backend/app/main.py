@@ -4,26 +4,20 @@ from .api import routes
 from .api.auth_routes import router as auth_router
 from .database import engine
 from . import models
+from .core.logging_config import setup_logging
+
+# Setup logging
+setup_logging()
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(
-    title="LegalDoc API",
-    description="API for Legal Document Processing with Authentication",
-    version="1.0.0"
-)
+app = FastAPI(title="LegalDoc API", version="1.0.0")
 
-# CORS middleware configuration
-origins = [
-    "http://localhost:3000",  # local dev
-    "http://127.0.0.1:3000",
-    "https://legaldoc-six.vercel.app"  # production frontend
-]
-
+# CORS middleware - simplified origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:3000", "https://legaldoc-six.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -35,8 +29,8 @@ app.include_router(routes.router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to LegalDoc API with Authentication"}
+    return {"message": "LegalDoc API"}
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy", "service": "LegalDoc API"}
+    return {"status": "healthy"}

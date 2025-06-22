@@ -25,10 +25,6 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-class TokenData(BaseModel):
-    email: Optional[str] = None
-
-# Document schemas
 class DocumentBase(BaseModel):
     original_filename: str
     file_size: str
@@ -52,4 +48,4 @@ class DocumentResponse(DocumentBase):
 class DocumentUploadResponse(BaseModel):
     message: str
     document: Optional[DocumentResponse] = None
-    is_duplicate: bool = False 
+    is_duplicate: bool = False

@@ -6,11 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Database configuration
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:postgres@db:5432/auth_db"  # Default for Docker
-)
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@db:5432/auth_db")
 
 # Create SQLAlchemy engine
 engine = create_engine(DATABASE_URL)

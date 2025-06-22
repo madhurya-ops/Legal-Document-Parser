@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 from passlib.context import CryptContext
 from typing import Optional, List
-import hashlib
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -44,10 +43,6 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[models
     return user
 
 # Document CRUD operations
-def calculate_file_hash(file_content: bytes) -> str:
-    """Calculate SHA-256 hash of file content"""
-    return hashlib.sha256(file_content).hexdigest()
-
 def check_duplicate_document(db: Session, file_hash: str, user_id: str) -> Optional[models.Document]:
     """Check if a document with the same hash already exists for the user"""
     return db.query(models.Document).filter(

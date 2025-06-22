@@ -10,31 +10,22 @@ router = APIRouter(prefix="/auth", tags=["authentication"])
 
 @router.post("/signup", response_model=schemas.UserResponse)
 def signup(user: schemas.UserCreate, db: Session = Depends(get_db)) -> Any:
-    """
-    Create a new user account
-    """
-    # Check if user with email already exists
     if crud.get_user_by_email(db, email=user.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
     
-    # Check if username already exists
     if crud.get_user_by_username(db, username=user.username):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already taken"
         )
     
-    # Create new user
     return crud.create_user(db=db, user=user)
 
 @router.post("/login", response_model=schemas.Token)
 def login(user_credentials: schemas.UserLogin, db: Session = Depends(get_db)) -> Any:
-    """
-    Authenticate user and return access token
-    """
     user = crud.authenticate_user(db, user_credentials.email, user_credentials.password)
     if not user:
         raise HTTPException(
@@ -52,19 +43,12 @@ def login(user_credentials: schemas.UserLogin, db: Session = Depends(get_db)) ->
 
 @router.get("/me", response_model=schemas.UserResponse)
 def read_users_me(current_user: schemas.UserResponse = Depends(auth.get_current_active_user)) -> Any:
-    """
-    Get current user profile
-    """
     return current_user
 
-# Additional router for root-level endpoints
 root_router = APIRouter(tags=["authentication"])
 
 @root_router.post("/login", response_model=schemas.Token)
 def login_with_username(user_credentials: schemas.UserLogin, db: Session = Depends(get_db)) -> Any:
-    """
-    Authenticate user with username/password and return access token
-    """
     user = crud.authenticate_user(db, user_credentials.email, user_credentials.password)
     if not user:
         raise HTTPException(
@@ -82,7 +66,4 @@ def login_with_username(user_credentials: schemas.UserLogin, db: Session = Depen
 
 @root_router.get("/me", response_model=schemas.UserResponse)
 def get_current_user_profile(current_user: schemas.UserResponse = Depends(auth.get_current_active_user)) -> Any:
-    """
-    Get current user profile (protected route)
-    """
-    return current_user 
+    return current_user
