@@ -214,7 +214,7 @@ export default function HomePage({ onGetStarted }) {
       </div>
 
       {/* Floating Chat Input/Button */}
-      <div className="fixed left-1/2 bottom-4 sm:bottom-8 -translate-x-1/2 z-50 w-full max-w-lg sm:max-w-2xl px-2 sm:px-4 animate-fade-in-up">
+      <div className="fixed inset-x-0 mx-auto bottom-4 sm:bottom-8 z-50 w-full max-w-lg sm:max-w-2xl px-2 sm:px-4 animate-fade-in-up">
         <div className="backdrop-blur-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-700/60 shadow-2xl rounded-2xl px-3 sm:px-6 py-3 sm:py-4 flex flex-col items-center gap-2">
           <div className="w-full flex flex-col sm:flex-row items-center gap-2">
             <input
