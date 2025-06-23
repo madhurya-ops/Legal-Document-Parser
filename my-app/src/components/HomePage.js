@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Scale, Github, Loader2, Mail, FileText as ResumeIcon, ArrowRight } from "lucide-react";
+import { Scale, Github, Loader2, Mail, FileText as ResumeIcon, ArrowRight, Menu } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const tabs = [
@@ -36,53 +36,77 @@ export default function HomePage({ onGetStarted }) {
   const [activeTab, setActiveTab] = useState("About");
   const [profiles, setProfiles] = useState([null, null]);
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     Promise.all(MAKERS.map(m => fetch(m.api).then(res => res.json()))).then(setProfiles).finally(() => setLoading(false));
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 bg-dots relative overflow-hidden transition-colors duration-300">
-      {/* Header with Tabs */}
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 bg-dots relative overflow-hidden transition-colors duration-300 font-sans">
+      {/* Header with centered logo and hamburger menu */}
       <header className="fixed left-0 top-0 w-full z-50 flex items-center justify-between px-2 sm:px-4 md:px-16 py-3 sm:py-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg shadow-2xl border border-slate-200/60 dark:border-slate-700/60 rounded-b-2xl">
-        <button
-          className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg px-1 py-1 hover:bg-blue-50 dark:hover:bg-blue-900/40 transition-colors"
-          onClick={() => setActiveTab('About')}
-          title="About LegalDoc"
-          aria-label="About LegalDoc"
-        >
-          <Scale className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-          <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">LegalDoc</span>
-        </button>
-        <nav className="flex-1 flex justify-center gap-2 md:gap-4 ml-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${activeTab === tab ? "bg-blue-600 text-white shadow-lg" : "bg-white/80 dark:bg-slate-800/80 border border-slate-300/60 dark:border-slate-600/60 text-slate-800 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/40 hover:border-blue-300 dark:hover:border-blue-600"}`}
-            >
-              {tab}
-            </button>
-          ))}
-        </nav>
+        {/* Hamburger menu */}
+        <div className="relative flex items-center">
+          <button
+            className="flex items-center justify-center p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/40 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label="Open menu"
+            type="button"
+          >
+            <Menu className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+          </button>
+          {/* Dropdown menu */}
+          {menuOpen && (
+            <div className="absolute left-0 top-12 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg py-2 flex flex-col animate-fade-in-up">
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => { setActiveTab(tab); setMenuOpen(false); }}
+                  className={`text-left px-5 py-2 text-base font-medium transition-colors duration-200 hover:bg-blue-50 dark:hover:bg-blue-800/40 text-slate-800 dark:text-slate-200 ${activeTab === tab ? "bg-blue-100 dark:bg-blue-900/40 font-semibold" : ""}`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {/* Centered logo */}
+        <div className="flex-1 flex justify-center">
+          <button
+            className="flex items-center gap-3 focus:outline-none"
+            onClick={() => setActiveTab('About')}
+            title="About LegalDoc"
+            aria-label="About LegalDoc"
+            tabIndex={-1}
+          >
+            <Scale className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">LegalDoc</span>
+          </button>
+        </div>
+        {/* Right side controls */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <a
-            href="https://github.com/Chai-B/Legal-Document-Parser"
+            href="https://github.com/madhurya-ops/Legal-Document-Parser"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-2 rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold bg-white/90 dark:bg-slate-900/90 hover:bg-blue-50 dark:hover:bg-blue-800/40 transition-all duration-300 shadow-md text-base"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold bg-white/90 dark:bg-slate-900/90 hover:bg-blue-50 dark:hover:bg-blue-800/40 transition-all duration-300 shadow-md text-base"
           >
             <Github className="w-5 h-5" /> GitHub
           </a>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <div className="px-2 sm:px-6 md:px-20 py-8 sm:py-12 text-center mt-24">
-        <h1 className="text-5xl font-extrabold text-blue-700 dark:text-blue-300 mb-6">AI-Powered Legal Document Interpreter</h1>
-        <p className="text-xl text-slate-700 dark:text-slate-300 max-w-4xl mx-auto">Upload, parse, and understand your legal documents instantly with AI. Extract obligations, penalties, dates, and clear summaries in plain English. Built for legal professionals, startups, and anyone dealing with contracts.</p>
-      </div>
+      {/* Minimal Landing Section */}
+      <main className="flex flex-1 flex-col items-center justify-center text-center px-4 mt-40 mb-12">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-blue-700 dark:text-blue-300 mb-6 tracking-tight">AI-Powered Legal Document Interpreter</h1>
+        <div className="space-y-4 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-slate-700 dark:text-slate-300">Upload, parse, and understand your legal documents instantly with AI.</p>
+          <p className="text-lg sm:text-xl text-slate-700 dark:text-slate-300">Extract obligations, penalties, dates, and clear summaries in plain English.</p>
+          <p className="text-lg sm:text-xl text-slate-700 dark:text-slate-300">Built for legal professionals, startups, and anyone dealing with contracts.</p>
+        </div>
+      </main>
 
       {/* Tab Content */}
       <div className="max-w-5xl mx-auto px-2 sm:px-4 md:px-0 pb-10 sm:pb-16">

@@ -6,5 +6,6 @@ index/
 *.faiss
 *.pkl
 .DS_Store
-node_modules
-node_modules/
+.DS_Store
+__pycache__/
+pdfs/
