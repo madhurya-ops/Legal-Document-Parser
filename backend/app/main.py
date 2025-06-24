@@ -17,7 +17,7 @@ app = FastAPI(title="LegalDoc API", version="1.0.0")
 # CORS middleware - simplified origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://legaldoc-six.vercel.app", "https://legaldoc-bansalchaitanya1234-2881s-projects.vercel.app/"],
+    allow_origins=["http://localhost:3000", "https://legaldoc-six.vercel.app", "https://legaldoc-bansalchaitanya1234-2881s-projects.vercel.app/", "https://legal-document-parser.vercel.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
