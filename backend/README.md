@@ -9,6 +9,7 @@ This is a FastAPI backend with PostgreSQL authentication system for the LegalDoc
 - **Database**: PostgreSQL with SQLAlchemy ORM
 - **API Documentation**: Auto-generated with FastAPI
 - **CORS Support**: Configured for frontend integration
+- **Document Processing**: AI-powered legal document analysis (Gemini 1.5 Flash)
 
 ## API Endpoints
 
@@ -55,7 +56,7 @@ Create a `.env` file in the backend directory with:
 ```env
 DATABASE_URL=postgresql://postgres:postgres@db:5432/auth_db
 SECRET_KEY=your-super-secret-key-change-this-in-production
-HF_API_KEY=your-huggingface-api-key
+GEMINI_API_KEY=your-gemini-api-key
 ```
 
 ### 2. Using Docker Compose (Recommended)

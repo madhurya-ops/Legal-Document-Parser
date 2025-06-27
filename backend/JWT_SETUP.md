@@ -23,8 +23,8 @@ SECRET_KEY=your-super-secret-key-change-this-in-production
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=15
 
-# Hugging Face API Key (for existing functionality)
-HF_API_KEY=your-huggingface-api-key
+# Gemini API Key (for LLM functionality)
+GEMINI_API_KEY=your-gemini-api-key
 ```
 
 ## API Endpoints
