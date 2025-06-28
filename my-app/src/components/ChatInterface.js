@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { Badge } from "./ui/badge";
-import { Bot, User, FileText, Scale, Loader2, MessageSquare, Send } from "lucide-react";
+import { Bot, User, FileText, Scale, Loader2, MessageSquare, Send, Square } from "lucide-react";
 import { sendQuery } from "../api";
 
 function readFileAsText(file) {
@@ -20,6 +20,7 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
   const [fileText, setFileText] = useState("");
   const scrollAreaRef = useRef(null);
   const lastMessageRef = useRef(null);
+  const [abortController, setAbortController] = useState(null);
 
   useEffect(() => {
     if (uploadedFile) {
@@ -53,10 +54,17 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+    const controller = new AbortController();
+    setAbortController(controller);
     try {
       const payload = { question: input };
       if (fileText) payload.file_content = fileText;
-      const answer = await sendQuery(payload);
+      const answer = await sendQuery(payload, controller.signal);
+      if (answer === "__aborted__") {
+        setIsLoading(false);
+        setAbortController(null);
+        return;
+      }
       const assistantMessage = {
         id: (Date.now() + 1).toString(),
         type: "assistant",
@@ -75,6 +83,15 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
+      setAbortController(null);
+    }
+  };
+
+  const handleStop = () => {
+    if (abortController) {
+      abortController.abort();
+      setIsLoading(false);
+      setAbortController(null);
     }
   };
 
@@ -192,13 +209,25 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
               }}
               disabled={isLoading}
             />
+            {isLoading ? (
+              <Button
+                type="button"
+                onClick={handleStop}
+                className="bg-red-600 hover:bg-red-700 text-white h-[36px] sm:h-[44px] px-4 sm:px-6 transition-all duration-300 hover:scale-105 disabled:hover:scale-100 rounded-xl"
+              >
+                <Square className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="ml-2 hidden sm:inline">Stop</span>
+              </Button>
+            ) : (
             <Button
               type="submit"
               disabled={!input.trim() || isLoading}
                 className="bg-blue-600 hover:bg-blue-700 text-white h-[36px] sm:h-[44px] px-4 sm:px-6 transition-all duration-300 hover:scale-105 disabled:hover:scale-100 rounded-xl"
             >
               <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="ml-2 hidden sm:inline">Send</span>
             </Button>
+            )}
           </form>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center sm:text-left">
             Press Enter to send • Shift+Enter for new line

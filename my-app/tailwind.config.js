@@ -6,6 +6,10 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        'sans': ['Prima Sans Mono', 'monospace'],
+        'mono': ['Prima Sans Mono', 'monospace'],
+      },
       colors: {
         // Custom light theme colors
         'light-bg': '#f8fafc',

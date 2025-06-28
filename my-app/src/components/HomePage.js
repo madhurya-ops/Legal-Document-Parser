@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Scale, Github, Loader2, Mail, FileText as ResumeIcon, ArrowRight, Menu } from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
+import { Scale, Github, Loader2, Mail, FileText as ResumeIcon, ArrowRight, Menu, MessageSquare } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import { useNavigate } from "react-router-dom";
 
 const tabs = [
   "About",
@@ -37,10 +38,20 @@ export default function HomePage({ onGetStarted }) {
   const [profiles, setProfiles] = useState([null, null]);
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const tabContentRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     Promise.all(MAKERS.map(m => fetch(m.api).then(res => res.json()))).then(setProfiles).finally(() => setLoading(false));
   }, []);
+
+  const scrollToTabContent = () => {
+    tabContentRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleGetStarted = () => {
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 bg-dots relative overflow-hidden transition-colors duration-300 font-sans">
@@ -62,7 +73,7 @@ export default function HomePage({ onGetStarted }) {
               {tabs.map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => { setActiveTab(tab); setMenuOpen(false); }}
+                  onClick={() => { setActiveTab(tab); setMenuOpen(false); scrollToTabContent(); }}
                   className={`text-left px-5 py-2 text-base font-medium transition-colors duration-200 hover:bg-blue-50 dark:hover:bg-blue-800/40 text-slate-800 dark:text-slate-200 ${activeTab === tab ? "bg-blue-100 dark:bg-blue-900/40 font-semibold" : ""}`}
                 >
                   {tab}
@@ -87,6 +98,12 @@ export default function HomePage({ onGetStarted }) {
         {/* Right side controls */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          <button
+            onClick={handleGetStarted}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold bg-white/90 dark:bg-slate-900/90 hover:bg-blue-50 dark:hover:bg-blue-800/40 transition-all duration-300 shadow-md text-base"
+          >
+            Get Started
+          </button>
           <a
             href="https://github.com/madhurya-ops/Legal-Document-Parser"
             target="_blank"
@@ -98,30 +115,43 @@ export default function HomePage({ onGetStarted }) {
         </div>
       </header>
 
-      {/* Minimal Landing Section */}
-      <main className="flex flex-1 flex-col items-center justify-center text-center px-4 mt-40 mb-12">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-blue-700 dark:text-blue-300 mb-6 tracking-tight">AI-Powered Legal Document Interpreter</h1>
-        <div className="space-y-4 max-w-2xl mx-auto">
+      {/* Modern, animated hero section */}
+      <main className="flex flex-col items-center justify-center text-center px-4 mt-40 mb-8 relative min-h-[50vh]">
+        <h1 className="relative z-10 text-4xl sm:text-5xl font-extrabold text-blue-700 dark:text-blue-300 mb-4 tracking-tight animate-fade-in-up drop-shadow-lg">AI-Powered Legal Document Interpreter</h1>
+        <div className="relative z-10 space-y-2 max-w-2xl mx-auto animate-fade-in-up">
           <p className="text-lg sm:text-xl text-slate-700 dark:text-slate-300">Upload, parse, and understand your legal documents instantly with AI.</p>
           <p className="text-lg sm:text-xl text-slate-700 dark:text-slate-300">Extract obligations, penalties, dates, and clear summaries in plain English.</p>
           <p className="text-lg sm:text-xl text-slate-700 dark:text-slate-300">Built for legal professionals, startups, and anyone dealing with contracts.</p>
         </div>
+        <button
+          onClick={scrollToTabContent}
+          className="relative z-10 mt-8 px-10 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xl font-bold shadow-xl transition-all duration-300 animate-bounce hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+        >
+          Learn More
+        </button>
       </main>
 
       {/* Tab Content */}
-      <div className="max-w-5xl mx-auto px-2 sm:px-4 md:px-0 pb-10 sm:pb-16">
-        <div className="rounded-3xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg shadow-2xl border border-slate-200/60 dark:border-slate-700/60 p-4 sm:p-8 md:p-12 space-y-6 sm:space-y-8">
+      <div ref={tabContentRef} className="max-w-5xl mx-auto px-2 sm:px-4 md:px-0 pb-8 space-y-8">
+        <div className="rounded-3xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg shadow-2xl border border-slate-200/60 dark:border-slate-700/60 p-4 sm:p-8 md:p-12 space-y-6 sm:space-y-8">
           {activeTab === "About" && (
-            <section>
+            <section className="relative animate-fade-in-up p-2 sm:p-4 md:p-8 rounded-2xl bg-white/90 dark:bg-slate-900/90 shadow-md mb-8">
               <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
-                About <span className="text-blue-700 dark:text-blue-400">LegalDoc</span>
+                About <span className="text-blue-700 dark:text-blue-400">LegalDoc Parser</span>
               </h2>
-              <p className="text-lg font-medium text-slate-900 dark:text-slate-100 mb-3">LegalDoc is a smart legal assistant platform that simplifies the interpretation of legal documents using AI. Designed for law firms, corporate legal teams, startups, and freelancers, it accelerates document review and clarifies complex clauses in plain English. Its AI extracts key obligations, penalties, deadlines, responsibilities, and actionable insights from PDF, DOCX, or TXT files within seconds.</p>
-              <p className="text-lg font-medium text-slate-900 dark:text-slate-100">LegalDoc also detects inconsistencies and risky clauses, delivering proactive recommendations. With enterprise-grade security, JWT authentication, encrypted storage, and an intuitive dashboard, it's a future-ready tool for modern legal professionals.</p>
+              <p className="text-lg font-medium text-slate-900 dark:text-slate-100 mb-3">LegalDoc Parser is a powerful AI-driven platform designed to automate and streamline the extraction of critical information from complex legal documents—contracts, agreements, policies, and more. Built for legal teams, enterprises, and compliance professionals, the parser eliminates manual review, alleviating bottlenecks, reducing errors, and accelerating informed decision-making.</p>
+              <ul className="list-disc pl-6 space-y-2 text-base text-slate-700 dark:text-slate-300 mb-3">
+                <li>Seamless document ingestion: Upload PDFs, DOCX files, plain text, or scanned documents (with OCR) via a user-friendly interface or API. Bulk upload capabilities support high-volume processing.</li>
+                <li>AI-powered extraction engine: Leveraging advanced NLP techniques and transformer-based models, our parser identifies core legal elements—parties, effective dates, obligations, clauses, liabilities, renewal terms, and more—converting them into clean, standardized formats.</li>
+                <li>User-centric design: After upload, documents are processed quickly and returned with structured outputs (JSON, CSV) accompanied by confidence scores and traceable metadata. Users can review or override entries before exporting.</li>
+                <li>Security and compliance: With encryption in transit and at rest, role-based access roles, and audit logging, the platform can be deployed in cloud or on-premises environments to meet enterprise-grade compliance requirements.</li>
+                <li>Scalable and future-proof: Built on a modular and extensible architecture, the platform supports continuous model updates, jurisdiction-specific clause recognition, and custom model fine-tuning for specialized needs.</li>
+              </ul>
+              <p className="text-lg font-medium text-slate-900 dark:text-slate-100">LegalDoc Parser empowers users to shift focus from manual data extraction to strategic thinking. By transforming legal text into structured intelligence and delivering it via an intuitive dashboard or API, the platform supports faster negotiations, better compliance oversight, and more efficient contract workflows—all within a secure, scalable framework.</p>
             </section>
           )}
           {activeTab === "Features" && (
-            <section>
+            <section className="relative animate-fade-in-up p-2 sm:p-4 md:p-8 rounded-2xl bg-blue-50/60 dark:bg-blue-900/30 shadow-md mb-8">
               <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
                 <span className="text-blue-700 dark:text-blue-400">Key Features</span>
               </h2>
@@ -140,7 +170,7 @@ export default function HomePage({ onGetStarted }) {
             </section>
           )}
           {activeTab === "Use Cases" && (
-            <section>
+            <section className="relative animate-fade-in-up p-2 sm:p-4 md:p-8 rounded-2xl bg-white/90 dark:bg-slate-900/90 shadow-md mb-8">
               <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
                 <span className="text-blue-700 dark:text-blue-400">Use Cases</span>
               </h2>
@@ -157,7 +187,7 @@ export default function HomePage({ onGetStarted }) {
             </section>
           )}
           {activeTab === "Why LegalDoc" && (
-            <section>
+            <section className="relative animate-fade-in-up p-2 sm:p-4 md:p-8 rounded-2xl bg-blue-50/60 dark:bg-blue-900/30 shadow-md mb-8">
               <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
                 Why Choose <span className="text-blue-700 dark:text-blue-400">LegalDoc?</span>
               </h2>
@@ -173,7 +203,7 @@ export default function HomePage({ onGetStarted }) {
             </section>
           )}
           {activeTab === "Tech Stack" && (
-            <section>
+            <section className="relative animate-fade-in-up p-2 sm:p-4 md:p-8 rounded-2xl bg-white/90 dark:bg-slate-900/90 shadow-md mb-8">
               <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
                 <span className="text-blue-700 dark:text-blue-400">Technology Stack</span>
               </h2>
@@ -189,7 +219,7 @@ export default function HomePage({ onGetStarted }) {
             </section>
           )}
           {activeTab === "FAQs" && (
-            <section>
+            <section className="relative animate-fade-in-up p-2 sm:p-4 md:p-8 rounded-2xl bg-blue-50/60 dark:bg-blue-900/30 shadow-md mb-8">
               <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-2 tracking-tight">
                 <span className="text-blue-700 dark:text-blue-400">Frequently Asked Questions</span>
               </h2>
@@ -207,20 +237,20 @@ export default function HomePage({ onGetStarted }) {
 
       {/* About the Makers Section */}
       <div className="max-w-5xl mx-auto px-2 sm:px-4 md:px-0 py-3 sm:py-5 animate-fade-in-up">
-        <div className="rounded-3xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg shadow-2xl border border-slate-200/60 dark:border-slate-700/60 p-4 sm:p-8 md:p-12">
-          <h3 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-8 text-center tracking-tight">
+        <div className="rounded-3xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg shadow-2xl border border-slate-200/60 dark:border-slate-700/60 p-8 sm:p-12 md:p-16 mt-8 mb-8 relative">
+          <h3 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 mb-10 text-center tracking-tight relative z-10">
             About the <span className="text-blue-700 dark:text-blue-400">Makers</span>
           </h3>
           {loading ? (
             <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 justify-center"><Loader2 className="animate-spin w-5 h-5" /> Loading profiles...</div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               {MAKERS.map((maker, i) => (
-                <div key={maker.github} className="flex flex-col items-center shadow-lg p-6 animate-fade-in-up bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-slate-200/60 dark:border-slate-600/60">
+                <div key={maker.github} className="flex flex-col items-center shadow-xl p-8 bg-white/95 dark:bg-slate-800/95 rounded-2xl border border-slate-200/60 dark:border-slate-600/60 transition-all duration-500 ease-out hover:scale-105 hover:shadow-2xl animate-fade-in-up">
                   <img
                     src={profiles[i]?.avatar_url || "https://avatars.githubusercontent.com/u/9919?v=4"}
                     alt="GitHub Avatar"
-                    className="w-24 h-24 rounded-full shadow-md mb-4"
+                    className="w-28 h-28 rounded-full shadow-lg mb-4"
                   />
                   <span className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-1">{profiles[i]?.name || maker.name}</span>
                   <span className="text-base font-medium text-slate-700 dark:text-slate-300 mb-2 text-center">{maker.bio}</span>

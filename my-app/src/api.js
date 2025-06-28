@@ -1,5 +1,5 @@
 // Sends a question to the FastAPI backend and returns the answer
-export const sendQuery = async (payload) => {
+export const sendQuery = async (payload, signal) => {
   const baseURL = (process.env.REACT_APP_API_URL || 'http://localhost:8000').replace(/\/+$/, '');
   try {
     const response = await fetch(`${baseURL}/ask`, {
@@ -8,6 +8,7 @@ export const sendQuery = async (payload) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
+      signal,
     });
     const data = await response.json();
     if (data && typeof data === 'object') {
@@ -20,6 +21,9 @@ export const sendQuery = async (payload) => {
       return String(data);
     }
   } catch (error) {
+    if (error.name === 'AbortError') {
+      return '__aborted__';
+    }
     console.error('❌ Error querying backend:', error);
     return 'Something went wrong while connecting to the server.';
   }
