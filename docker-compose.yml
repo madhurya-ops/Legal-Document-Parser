@@ -23,6 +23,7 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/auth_db
       - SECRET_KEY=your-super-secret-key-change-this-in-production
       - HF_API_KEY=${HF_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     volumes:
       - ./index:/app/index
     depends_on:
