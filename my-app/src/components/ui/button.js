@@ -3,12 +3,12 @@ import React from "react";
 export const Button = React.forwardRef(({ className = "", variant = "default", size = "default", asChild = false, ...props }, ref) => {
   const Comp = asChild ? "span" : "button";
   const variantClasses = {
-    default: "bg-blue-600 hover:bg-blue-700 text-white",
-    destructive: "bg-red-600 hover:bg-red-700 text-white",
-    outline: "border border-slate-300 dark:border-slate-600 bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100",
-    secondary: "bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600",
-    ghost: "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100",
-    link: "text-blue-600 underline-offset-4 hover:underline",
+    default: "bg-primary text-primary-foreground hover:bg-primary/90",
+    destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/80",
+    outline: "border border-border bg-background text-foreground hover:bg-muted",
+    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+    ghost: "bg-transparent text-foreground hover:bg-muted",
+    link: "text-primary underline-offset-4 hover:underline",
   };
   const sizeClasses = {
     default: "h-10 px-4 py-2",
@@ -18,7 +18,7 @@ export const Button = React.forwardRef(({ className = "", variant = "default", s
   };
   return (
     <Comp
-      className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${variantClasses[variant] || variantClasses.default} ${sizeClasses[size] || sizeClasses.default} hover:scale-105 hover:shadow-lg ${className}`}
+      className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${variantClasses[variant] || variantClasses.default} ${sizeClasses[size] || sizeClasses.default} hover:scale-105 hover:shadow-lg ${className}`}
       ref={ref}
       {...props}
     />
