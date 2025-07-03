@@ -22,8 +22,8 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/auth_db
       - SECRET_KEY=your-super-secret-key-change-this-in-production
-      - HF_API_KEY=${HF_API_KEY}
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_API_KEY=AIzaSyDiTf_auB_xigiycG6sOcBaJ0zrHxiQBO8
+      - SYSTEM_PROMPT=You are a helpful, friendly, and professional legal assistant specializing in Indian law. You may respond to greetings and small talk briefly. For legal questions, provide detailed analysis based on provided context. If information is not available, say 'I don't know' rather than guessing.
     volumes:
       - ./index:/app/index
     depends_on:

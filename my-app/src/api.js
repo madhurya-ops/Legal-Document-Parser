@@ -2,7 +2,7 @@
 export const sendQuery = async (payload) => {
   const baseURL = (process.env.REACT_APP_API_URL || 'http://localhost:8000').replace(/\/+$/, '');
   try {
-    const response = await fetch(`${baseURL}/ask`, {
+    const response = await fetch(`${baseURL}/api/ask`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export const sendQuery = async (payload) => {
 const baseURL = (process.env.REACT_APP_API_URL || 'http://localhost:8000').replace(/\/+$/, '');
 
 export const loginUser = async (email, password) => {
-  const response = await fetch(`${baseURL}/auth/login`, {
+  const response = await fetch(`${baseURL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
@@ -39,7 +39,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const signupUser = async (username, email, password) => {
-  const response = await fetch(`${baseURL}/auth/signup`, {
+  const response = await fetch(`${baseURL}/api/auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, email, password })
@@ -49,7 +49,7 @@ export const signupUser = async (username, email, password) => {
 };
 
 export const getCurrentUser = async (token) => {
-  const response = await fetch(`${baseURL}/auth/me`, {
+  const response = await fetch(`${baseURL}/api/auth/me`, {
     method: 'GET',
     headers: { 'Authorization': `Bearer ${token}` }
   });
