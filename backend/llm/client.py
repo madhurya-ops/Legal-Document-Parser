@@ -30,6 +30,10 @@ def query(context: str, prompt: str) -> str:
     if len(prompt) > 800:
         prompt = prompt[:800] + "..."
     
+    # Handle special case where no documents are uploaded
+    if context.startswith("NO_DOCUMENTS_UPLOADED:"):
+        return "I don't see any documents uploaded to analyze. Please upload a PDF, DOCX, or TXT file first, and then I'll be happy to help you analyze its contents, extract key information, or answer questions about it."
+    
     # Combine system instruction, context, and prompt
     full_prompt = system_instruction + "Context:\n" + context + "\n\nQuestion: " + prompt
     

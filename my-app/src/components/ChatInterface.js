@@ -5,29 +5,11 @@ import { Badge } from "./ui/badge";
 import { Bot, User, FileText, Scale, Loader2, MessageSquare, Send } from "lucide-react";
 import { sendQuery } from "../api";
 
-function readFileAsText(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsText(file);
-  });
-}
-
 export default function ChatInterface({ uploadedFile, messages, setMessages }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [fileText, setFileText] = useState("");
   const scrollAreaRef = useRef(null);
   const lastMessageRef = useRef(null);
-
-  useEffect(() => {
-    if (uploadedFile) {
-      readFileAsText(uploadedFile).then(setFileText).catch(() => setFileText(""));
-    } else {
-      setFileText("");
-    }
-  }, [uploadedFile]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -54,8 +36,8 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
     setInput("");
     setIsLoading(true);
     try {
+      // Backend will use documents from vector store, no need to send file content
       const payload = { question: input };
-      if (fileText) payload.file_content = fileText;
       const answer = await sendQuery(payload);
       const assistantMessage = {
         id: (Date.now() + 1).toString(),

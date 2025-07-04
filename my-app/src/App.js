@@ -60,9 +60,11 @@ export default function App() {
     return uploadedFiles.filter((file) => file.name.toLowerCase().includes(searchQuery.toLowerCase()));
   }, [uploadedFiles, searchQuery]);
 
-  const handleFileUpload = (file) => {
-    setUploadedFiles((prev) => [...prev, file]);
-    setSelectedDocument(file);
+  const handleFileUpload = (file, uploadResult) => {
+    // Store file with upload result from backend
+    const fileWithResult = { ...file, uploadResult };
+    setUploadedFiles((prev) => [...prev, fileWithResult]);
+    setSelectedDocument(fileWithResult);
   };
 
   const removeFile = (index) => {
