@@ -1,0 +1,152 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: legaldoc_prod_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-legaldoc_prod}
+      POSTGRES_USER: ${POSTGRES_USER:-legaldoc_prod_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_this_secure_password}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-legaldoc_prod_user} -d ${POSTGRES_DB:-legaldoc_prod}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - legaldoc_prod_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: legaldoc_prod_redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-change_this_redis_password}
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - legaldoc_prod_network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: legaldoc_prod_backend
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-legaldoc_prod_user}:${POSTGRES_PASSWORD:-change_this_secure_password}@db:5432/${POSTGRES_DB:-legaldoc_prod}
+      - SECRET_KEY=${SECRET_KEY:-change_this_super_secret_jwt_key_in_production}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_API_URL=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - APP_NAME=LegalDoc API
+      - APP_VERSION=2.0.0
+      - FRONTEND_URL=${FRONTEND_URL:-https://yourdomain.com}
+      - PRODUCTION_URL=${PRODUCTION_URL:-https://yourdomain.com}
+      - SYSTEM_PROMPT=${SYSTEM_PROMPT:-You are a helpful, friendly, and professional legal assistant specializing in Indian law.}
+      - VECTOR_STORE_PATH=./vector_store
+      - EMBEDDING_MODEL=sentence-transformers/paraphrase-MiniLM-L3-v2
+      - CHUNK_SIZE=1000
+      - CHUNK_OVERLAP=200
+      - MAX_TOKENS=500
+      - TEMPERATURE=0.7
+      - TIMEOUT=30
+      - MAX_FILE_SIZE=50MB
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-change_this_redis_password}@redis:6379/0
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./backend/vector_store:/app/vector_store
+      - ./backend/uploads:/app/uploads
+      - ./backend/logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - legaldoc_prod_network
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${FRONTEND_API_URL:-https://api.yourdomain.com}
+        - REACT_APP_NAME=LegalDoc
+        - REACT_APP_VERSION=2.0.0
+        - REACT_APP_DESCRIPTION=AI-powered legal document analysis platform
+        - GENERATE_SOURCEMAP=false
+        - REACT_APP_DEBUG=false
+        - REACT_APP_ENABLE_LAZY_LOADING=true
+        - REACT_APP_CACHE_DURATION=600000
+        - REACT_APP_ENABLE_CHAT_HISTORY=true
+        - REACT_APP_ENABLE_DOCUMENT_EXPORT=true
+        - REACT_APP_ENABLE_ADMIN_PANEL=true
+    container_name: legaldoc_prod_frontend
+    restart: unless-stopped
+    networks:
+      - legaldoc_prod_network
+    expose:
+      - "80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: legaldoc_prod_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx-prod.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+    networks:
+      - legaldoc_prod_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  legaldoc_prod_network:
+    driver: bridge

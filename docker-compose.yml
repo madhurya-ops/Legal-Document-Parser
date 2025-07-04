@@ -1,0 +1,154 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: legaldoc_db
+    environment:
+      POSTGRES_DB: legaldoc_db
+      POSTGRES_USER: legaldoc_user
+      POSTGRES_PASSWORD: legaldoc_secure_password_123
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U legaldoc_user -d legaldoc_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - legaldoc_network
+
+  # Redis Cache (for session management and caching)
+  redis:
+    image: redis:7-alpine
+    container_name: legaldoc_redis
+    command: redis-server --appendonly yes --requirepass redis_secure_password_123
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - legaldoc_network
+
+  # FastAPI Backend
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: legaldoc_backend
+    ports:
+      - "8000:8000"
+    environment:
+      # Database Configuration
+      - DATABASE_URL=postgresql://legaldoc_user:legaldoc_secure_password_123@db:5432/legaldoc_db
+      
+      # AI/ML Configuration
+      - GEMINI_API_KEY=AIzaSyDiTf_auB_xigiycG6sOcBaJ0zrHxiQBO8
+      - GEMINI_API_URL=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
+      
+      # JWT Configuration
+      - SECRET_KEY=legaldoc-super-secret-jwt-key-change-in-production-2024
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      
+      # Application Configuration
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - APP_NAME=LegalDoc API
+      - APP_VERSION=2.0.0
+      
+      # CORS Configuration
+      - FRONTEND_URL=http://localhost:3000
+      - PRODUCTION_URL=https://legaldoc-six.vercel.app
+      
+      # AI System Configuration
+      - SYSTEM_PROMPT=You are a helpful, friendly, and professional legal assistant. You may respond to greetings, small talk, and polite conversation in a natural, human-like way but only very short answers only. Greeting and small talks must not be more than 1 line. Do not give any information unless asked by the user explicitly, answer or talk only as much as required. For legal or document-related questions, answer only if the information is present in the provided context/database. If you do not know the answer or it is not present in the context, say 'I don't know' or politely indicate you cannot answer. Do not make up information or hallucinate. Stay within the scope of the provided legal documents and data. If a user asks something completely out of scope (not a greeting, small talk, or legal/document question), politely decline to answer.
+      
+      # Vector Store Configuration
+      - VECTOR_STORE_PATH=./vector_store
+      - EMBEDDING_MODEL=sentence-transformers/paraphrase-MiniLM-L3-v2
+      - CHUNK_SIZE=1000
+      - CHUNK_OVERLAP=200
+      
+      # Performance Configuration
+      - MAX_TOKENS=500
+      - TEMPERATURE=0.7
+      - TIMEOUT=30
+      - MAX_FILE_SIZE=50MB
+      
+      # Redis Configuration
+      - REDIS_URL=redis://:redis_secure_password_123@redis:6379/0
+      
+      # Logging Configuration
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+    volumes:
+      - ./backend/vector_store:/app/vector_store
+      - ./backend/uploads:/app/uploads
+      - ./backend/logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - legaldoc_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=
+        - REACT_APP_NAME=LegalDoc
+        - REACT_APP_VERSION=2.0.0
+        - REACT_APP_DESCRIPTION=AI-powered legal document analysis platform
+        - GENERATE_SOURCEMAP=false
+        - REACT_APP_DEBUG=false
+        - REACT_APP_ENABLE_LAZY_LOADING=true
+        - REACT_APP_CACHE_DURATION=300000
+        - REACT_APP_ENABLE_CHAT_HISTORY=true
+        - REACT_APP_ENABLE_DOCUMENT_EXPORT=true
+        - REACT_APP_ENABLE_ADMIN_PANEL=true
+    container_name: legaldoc_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - legaldoc_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  legaldoc_network:
+    driver: bridge
