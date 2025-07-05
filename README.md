@@ -229,4 +229,4 @@ docker-compose logs
 
 ## License
 
-This project is licensed under the MIT License.# update Sun Jul  6 02:56:34 IST 2025
+This project is licensed under the MIT License.

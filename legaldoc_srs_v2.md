@@ -1785,4 +1785,3 @@ Authorization: Bearer <token>
 - AWS S3 (Storage)
 - SendGrid (Email)
 - Stripe (Payments)
-        self# update Sun Jul  6 02:56:34 IST 2025

@@ -52,4 +52,4 @@ If you get 404 errors:
 1. Check that `REACT_APP_API_URL` is set correctly in Vercel
 2. Verify your backend is running on Render
 3. Check the Render logs for any startup errors
-4. Ensure the `GEMINI_API_KEY` is set in your Render environment # update Sun Jul  6 02:56:34 IST 2025
+4. Ensure the `GEMINI_API_KEY` is set in your Render environment
