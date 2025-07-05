@@ -148,3 +148,4 @@ export const updateSessionName = async (
   const response = await api.put(`/chat/sessions/${sessionId}`, { session_name: name });
   return response.data;
 };
+# update Sun Jul  6 02:56:34 IST 2025

@@ -204,4 +204,4 @@ export default function AuthPage({ onAuthSuccess, onBack, cardSize = "xl" }) {
       </CardFooter>
     </Card>
   );
-}
+}# update Sun Jul  6 02:56:34 IST 2025

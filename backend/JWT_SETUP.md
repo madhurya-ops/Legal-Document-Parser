@@ -239,4 +239,4 @@ Once the server is running, visit:
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
-These provide interactive documentation for all endpoints including the JWT authentication system. 
+These provide interactive documentation for all endpoints including the JWT authentication system. # update Sun Jul  6 02:56:34 IST 2025

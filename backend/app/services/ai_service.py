@@ -380,3 +380,4 @@ class AIService:
         ]
         return suggestions[:3]  # Return top 3 suggestions
 # update Sun Jul  6 02:54:59 IST 2025
+# update Sun Jul  6 02:56:34 IST 2025

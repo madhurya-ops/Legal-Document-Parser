@@ -15,4 +15,4 @@ COPY --from=build /app/build /usr/share/nginx/html
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]# update Sun Jul  6 02:56:34 IST 2025

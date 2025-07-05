@@ -82,3 +82,4 @@ if __name__ == "__main__":
     print("\n🔑 Admin credentials:")
     print("• Email: admin@legaldoc.com")
     print("• Password: AdminPassword123!")
+# update Sun Jul  6 02:56:34 IST 2025
