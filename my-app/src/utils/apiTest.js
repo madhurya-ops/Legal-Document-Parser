@@ -29,4 +29,4 @@ export const testApiConnection = async () => {
   }
 };
 
-// Usage: testApiConnection().then(console.log); # update Sun Jul  6 02:56:34 IST 2025
+// Usage: testApiConnection().then(console.log); 

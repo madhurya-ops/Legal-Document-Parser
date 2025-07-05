@@ -190,4 +190,4 @@ export default function ChatInterface({ uploadedFile, messages, setMessages }) {
       </div>
     </div>
   );
-} # update Sun Jul  6 02:56:34 IST 2025
+} 

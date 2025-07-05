@@ -318,4 +318,4 @@ export default function HomePage({ onGetStarted, activeTab, setActiveTab }) {
       </footer>
     </div>
   );
-} # update Sun Jul  6 02:56:34 IST 2025
+} 
