@@ -102,3 +102,4 @@ def create_admin_user(db: Session, email: str, username: str, password: str) -> 
     admin_user = crud.update_user(db, str(user.id), update_data)
     
     return schemas.UserResponse.from_orm(admin_user)
+# update Sun Jul  6 02:54:59 IST 2025

@@ -368,3 +368,4 @@ def get_recent_activities(db: Session, limit: int = 10) -> List[dict]:
     # Sort by timestamp and return limited results
     activities.sort(key=lambda x: x["timestamp"], reverse=True)
     return activities[:limit]
+# update Sun Jul  6 02:54:59 IST 2025

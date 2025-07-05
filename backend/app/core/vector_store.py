@@ -136,3 +136,4 @@ async def add_documents_to_vector_store(text: str, file_path: str):
     except Exception as e:
         logger.error(f"Error adding documents to vector store: {e}")
         raise
+# update Sun Jul  6 02:54:59 IST 2025

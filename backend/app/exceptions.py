@@ -111,3 +111,4 @@ class DatabaseError(AppException):
             message=message,
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+# update Sun Jul  6 02:54:59 IST 2025

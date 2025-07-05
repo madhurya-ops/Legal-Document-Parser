@@ -23,4 +23,4 @@ def get_db():
     try:
         yield db
     finally:
-        db.close() 
+        db.close() # update Sun Jul  6 02:54:59 IST 2025

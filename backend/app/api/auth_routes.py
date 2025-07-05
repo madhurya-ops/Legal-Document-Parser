@@ -66,4 +66,4 @@ def login_with_username(user_credentials: schemas.UserLogin, db: Session = Depen
 
 @root_router.get("/me", response_model=schemas.UserResponse)
 def get_current_user_profile(current_user: schemas.UserResponse = Depends(auth.get_current_active_user)) -> Any:
-    return current_user
+    return current_user# update Sun Jul  6 02:54:59 IST 2025

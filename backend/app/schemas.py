@@ -209,3 +209,4 @@ class AdminDashboardResponse(BaseModel):
     document_stats: DocumentStatsResponse
     system_stats: SystemStatsResponse
     recent_activities: List[Dict[str, Any]]
+# update Sun Jul  6 02:54:59 IST 2025
