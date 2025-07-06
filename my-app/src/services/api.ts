@@ -3,7 +3,7 @@ import { getToken } from './auth';
 
 // Create axios instance
 export const api: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000/api',
+  baseURL: process.env.REACT_APP_API_URL || 'https://legal-document-parser.onrender.com',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ api.interceptors.response.use(
         const token = getToken();
         if (token) {
           // Attempt token refresh
-          const refreshResponse = await api.post('/auth/refresh', { refresh_token: token });
+          const refreshResponse = await api.post('/api/auth/refresh', { refresh_token: token });
           const newToken = refreshResponse.data.access_token;
           
           if (newToken) {

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardFooter } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import ThemeToggle from "./ThemeToggle";
-import { loginUser, signupUser, storeToken, getCurrentUser } from "../api";
+import { login, register, getCurrentUser } from "../services/auth";
 import { Scale, Loader2, Eye, EyeOff, FileText, Sparkles, ArrowRight } from "lucide-react";
 
 function parseErrorMessage(err, mode) {
@@ -41,13 +41,12 @@ export default function AuthPage({ onAuthSuccess, onBack, cardSize = "xl" }) {
     setSuccess("");
     try {
       if (mode === "login") {
-        const data = await loginUser(form.email, form.password);
-        storeToken(data.access_token);
-        const user = await getCurrentUser(data.access_token);
+        await login({ email: form.email, password: form.password });
+        const user = await getCurrentUser();
         setSuccess("Welcome back! Redirecting...");
         setTimeout(() => onAuthSuccess(user), 700);
       } else {
-        await signupUser(form.username, form.email, form.password);
+        await register({ username: form.username, email: form.email, password: form.password });
         setSuccess("Signup successful! Please log in.");
         setMode("login");
         setForm({ username: "", email: form.email, password: "", confirmPassword: "" });

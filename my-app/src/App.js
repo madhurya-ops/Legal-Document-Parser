@@ -10,7 +10,7 @@ import "./App.css";
 import AuthPage from "./components/AuthPage";
 import HomePage from "./components/HomePage";
 import AboutPage from "./components/AboutPage";
-import { getToken, getCurrentUser, clearToken } from "./api";
+import { getToken, getCurrentUser, logout } from "./services/auth";
 import { Button } from "./components/ui/button";
 
 const tabs = [
@@ -41,13 +41,13 @@ export default function App() {
       setAuthLoading(false);
       return;
     }
-    getCurrentUser(token)
+    getCurrentUser()
       .then((u) => {
         setUser(u);
         setShowHome(false);
       })
       .catch(() => {
-        clearToken();
+        logout();
         setUser(null);
         setShowHome(true);
       })
@@ -75,7 +75,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    clearToken();
+    logout();
     setUser(null);
     setShowHome(true);
     setShowAuth(false);

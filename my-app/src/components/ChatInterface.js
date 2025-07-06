@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { Badge } from "./ui/badge";
 import { Bot, User, FileText, Scale, Loader2, MessageSquare, Send } from "lucide-react";
-import { sendQuery } from "../api";
+import { sendQuery } from "../services/chat";
 
 export default function ChatInterface({ uploadedFile, messages, setMessages }) {
   const [input, setInput] = useState("");

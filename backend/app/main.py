@@ -39,14 +39,15 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware - simplified origins
+# CORS middleware - updated origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
         "https://legaldoc-six.vercel.app",
         "https://legaldoc-bansalchaitanya1234-2881s-projects.vercel.app",
-        "https://legal-document-parser.vercel.app"
+        "https://legal-document-parser.vercel.app",
+        "https://legal-document-parser-kpgy5779l-madhuryas-projects.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],

@@ -149,3 +149,22 @@ export const updateSessionName = async (
   return response.data;
 };
 
+export interface ChatQuery {
+  question: string;
+  file_content?: string;
+}
+
+export interface AskResponse {
+  answer: string;
+}
+
+export const sendQuery = async (payload: ChatQuery): Promise<string> => {
+  try {
+    const response = await api.post<AskResponse>('/api/ask', payload);
+    return response.data.answer;
+  } catch (error) {
+    console.error('❌ Error querying backend:', error);
+    throw new Error('Something went wrong while connecting to the server.');
+  }
+};
+
