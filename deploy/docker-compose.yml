@@ -34,8 +34,8 @@ services:
   # FastAPI Backend
   api:
     build:
-      context: ..
-      dockerfile: deploy/Dockerfile
+      context: ../api
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     env_file:
