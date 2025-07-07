@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: legaldoc-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: legaldoc-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: HF_API_KEY
+        sync: false
+    healthCheckPath: /health
+
+databases:
+  - name: legaldoc-db
+    databaseName: legaldoc

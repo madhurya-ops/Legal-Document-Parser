@@ -1,0 +1,15 @@
+venv/
+backend/venv/
+backend/index/
+backend/embeddings/
+index/
+.DS_Store
+__pycache__/
+backend/app/__pycache__/
+backend/app/api/__pycache__/
+*.pyc
+*.pkl
+*.faiss
+node_modules/
+build/
+.env
