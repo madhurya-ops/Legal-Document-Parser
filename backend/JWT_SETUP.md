@@ -23,8 +23,8 @@ SECRET_KEY=your-super-secret-key-change-this-in-production
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=15
 
-# Hugging Face API Key (for existing functionality)
-HF_API_KEY=your-huggingface-api-key
+# Gemini API Key (for LLM functionality)
+GEMINI_API_KEY=your-gemini-api-key
 ```
 
 ## API Endpoints
@@ -239,4 +239,4 @@ Once the server is running, visit:
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
-These provide interactive documentation for all endpoints including the JWT authentication system. 
+These provide interactive documentation for all endpoints including the JWT authentication system. # update Sun Jul  6 02:56:34 IST 2025

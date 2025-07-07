@@ -7,19 +7,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Custom light theme colors
-        'light-bg': '#f8fafc',
-        'light-card': '#ffffff',
-        'light-border': '#e2e8f0',
-        'light-text': '#1e293b',
-        'light-text-secondary': '#64748b',
-        
-        // Custom dark theme colors
-        'dark-bg': '#0f172a',
-        'dark-card': '#1e293b',
-        'dark-border': '#334155',
-        'dark-text': '#f1f5f9',
-        'dark-text-secondary': '#94a3b8',
+        // Use CSS variables for theme colors, matching newfront
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: 'hsl(var(--primary))',
+        'primary-foreground': 'hsl(var(--primary-foreground))',
+        secondary: 'hsl(var(--secondary))',
+        'secondary-foreground': 'hsl(var(--secondary-foreground))',
+        accent: 'hsl(var(--accent))',
+        'accent-foreground': 'hsl(var(--accent-foreground))',
+        muted: 'hsl(var(--muted))',
+        'muted-foreground': 'hsl(var(--muted-foreground))',
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        destructive: 'hsl(var(--destructive))',
+        'destructive-foreground': 'hsl(var(--destructive-foreground))',
+        // No custom dark- keys, all handled by CSS variables
       },
       animation: {
         'fade-in-up': 'fadeInUp 0.6s ease-out',

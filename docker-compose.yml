@@ -22,7 +22,8 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/auth_db
       - SECRET_KEY=your-super-secret-key-change-this-in-production
-      - HF_API_KEY=${HF_API_KEY}
+      - GEMINI_API_KEY=AIzaSyDiTf_auB_xigiycG6sOcBaJ0zrHxiQBO8
+      - SYSTEM_PROMPT=You are a helpful, friendly, and professional legal assistant specializing in Indian law. You may respond to greetings and small talk briefly. For legal questions, analyze the provided context carefully. If the context contains actual legal document content (contracts, agreements, legal text), provide detailed analysis based on that content. IMPORTANT - Only ask for document uploads if the context contains ONLY system messages like Welcome to LegalDoc. If real document content is present in the context, analyze it directly. Do NOT confuse document content with missing documents. If specific information is not available in the provided context, say I don't know rather than guessing.
     volumes:
       - ./index:/app/index
     depends_on:
@@ -36,6 +37,9 @@ services:
         - REACT_APP_API_URL=http://localhost:8000
     ports:
       - "3000:80"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
+# update Sun Jul  6 02:56:34 IST 2025

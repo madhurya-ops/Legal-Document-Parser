@@ -29,9 +29,8 @@ except ImportError:
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Settings - Ultra lightweight with configurable limits
-pdf_folder = "uploads"  # Changed from "pdfs" to "uploads"
+pdf_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pdfs")
 index_path = "index"
-chunks_path = os.path.join(index_path, "chunks") # New path for text chunks
 MAX_PDF_SIZE_MB = config['MAX_PDF_SIZE_MB']
 MAX_PAGES = config['MAX_PAGES']
 MAX_CHUNKS = config['MAX_CHUNKS']
@@ -54,10 +53,6 @@ def process_and_store_pdfs_lightweight():
         os.makedirs(pdf_folder)
         logging.info("No documents to process.")
         return
-    
-    # Create chunks directory if it doesn't exist
-    if not os.path.exists(chunks_path):
-        os.makedirs(chunks_path)
     
     pdf_files = [f for f in os.listdir(pdf_folder) if f.endswith(('.pdf', '.docx', '.txt'))]
     logging.info(f"Found {len(pdf_files)} documents in uploads folder.")
@@ -129,19 +124,8 @@ def process_and_store_pdfs_lightweight():
                         split_docs = split_docs[:MAX_CHUNKS_PER_PAGE]
                     
                     for doc in split_docs:
-                        chunk_id = f"chunk_{uuid.uuid4().hex}.txt"
-                        chunk_file_path = os.path.join(chunks_path, chunk_id)
-                        
-                        # Save chunk content to its own file
-                        with open(chunk_file_path, "w", encoding="utf-8") as f:
-                            f.write(doc.page_content)
-                        
-                        # Store path in metadata, clear content from memory
                         doc.metadata["source"] = filename
                         doc.metadata["page"] = i + 1
-                        doc.metadata["chunk_path"] = chunk_file_path
-                        doc.page_content = "" # Erase content to save RAM
-                        
                         documents.append(doc)
                         total_chunks += 1
                         
@@ -183,15 +167,8 @@ def process_and_store_pdfs_lightweight():
                 model = SentenceTransformer('all-MiniLM-L6-v2')
             
             # Create embeddings in very small batches
-            texts_for_embedding = []
-            for doc in documents:
-                try:
-                    with open(doc.metadata['chunk_path'], 'r', encoding='utf-8') as f:
-                        texts_for_embedding.append(f.read())
-                except Exception as e:
-                    logging.error(f"Could not read chunk {doc.metadata['chunk_path']}: {e}")
-                    texts_for_embedding.append("") # Append empty string on error
-
+            texts_for_embedding = [doc.page_content for doc in documents]
+            
             all_embeddings = []
             for i in range(0, len(texts_for_embedding), BATCH_SIZE):
                 batch_texts = texts_for_embedding[i:i + BATCH_SIZE]
@@ -254,4 +231,5 @@ def process_and_store_pdfs_lightweight():
 
 if __name__ == "__main__":
     from tqdm import tqdm
-    process_and_store_pdfs_lightweight() 
+    process_and_store_pdfs_lightweight() # update Sun Jul  6 02:54:59 IST 2025
+# update Sun Jul  6 02:56:34 IST 2025

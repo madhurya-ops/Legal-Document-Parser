@@ -18,4 +18,3 @@ services:
 databases:
   - name: legaldoc-db
     databaseName: legaldoc
-    user: legaldoc

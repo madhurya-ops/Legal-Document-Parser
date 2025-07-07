@@ -23,4 +23,5 @@ RENDER_PAID_TIER = {
 
 def get_config(tier='free'):
     """Get configuration based on deployment tier"""
-    return RENDER_PAID_TIER if tier == 'paid' else RENDER_FREE_TIER 
+    return RENDER_PAID_TIER if tier == 'paid' else RENDER_FREE_TIER # update Sun Jul  6 02:55:00 IST 2025
+# update Sun Jul  6 02:56:34 IST 2025

@@ -4,9 +4,48 @@ import { Upload, FileText, CheckCircle } from "lucide-react";
 
 export default function FileUpload({ onFileUpload, selectedDocument, boxSize }) {
   const [isDragging, setIsDragging] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(null);
 
-  const handleFileUpload = useCallback((file) => {
-    onFileUpload(file);
+  const handleFileUpload = useCallback(async (file) => {
+    setUploadStatus('uploading');
+    try {
+      // Send file to backend for processing
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const token = localStorage.getItem('access_token');
+      const baseURL = (process.env.REACT_APP_API_URL || 'http://localhost:8000').replace(/\/+$/, '');
+      const uploadURL = `${baseURL}/api/upload`;
+      
+      console.log('Upload Debug:', {
+        'REACT_APP_API_URL': process.env.REACT_APP_API_URL,
+        'baseURL': baseURL,
+        'uploadURL': uploadURL,
+        'token': token ? 'present' : 'missing'
+      });
+      
+      const response = await fetch(uploadURL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        setUploadStatus('success');
+        onFileUpload(file, result); // Pass the result back
+      } else {
+        setUploadStatus('error');
+        const errorText = await response.text();
+        console.error('Upload failed:', response.status, response.statusText);
+        console.error('Error details:', errorText);
+      }
+    } catch (error) {
+      setUploadStatus('error');
+      console.error('Upload error:', error);
+    }
   }, [onFileUpload]);
 
   const handleDragOver = useCallback((e) => {
@@ -90,9 +129,22 @@ export default function FileUpload({ onFileUpload, selectedDocument, boxSize }) 
               </div>
               <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="mt-3 p-3 bg-blue-50/80 dark:bg-blue-900/20 border border-blue-200/60 dark:border-blue-800/60 rounded-lg">
-              <p className="text-blue-700 dark:text-blue-300 text-sm">
-                File upload is for local context only. No file is sent to the backend.
+            <div className={`mt-3 p-3 border rounded-lg ${
+              uploadStatus === 'uploading' ? 'bg-yellow-50/80 dark:bg-yellow-900/20 border-yellow-200/60 dark:border-yellow-800/60' :
+              uploadStatus === 'success' ? 'bg-green-50/80 dark:bg-green-900/20 border-green-200/60 dark:border-green-800/60' :
+              uploadStatus === 'error' ? 'bg-red-50/80 dark:bg-red-900/20 border-red-200/60 dark:border-red-800/60' :
+              'bg-blue-50/80 dark:bg-blue-900/20 border-blue-200/60 dark:border-blue-800/60'
+            }`}>
+              <p className={`text-sm ${
+                uploadStatus === 'uploading' ? 'text-yellow-700 dark:text-yellow-300' :
+                uploadStatus === 'success' ? 'text-green-700 dark:text-green-300' :
+                uploadStatus === 'error' ? 'text-red-700 dark:text-red-300' :
+                'text-blue-700 dark:text-blue-300'
+              }`}>
+                {uploadStatus === 'uploading' ? 'Uploading and processing document...' :
+                 uploadStatus === 'success' ? 'Document uploaded and processed successfully!' :
+                 uploadStatus === 'error' ? 'Upload failed. Please try again.' :
+                 'Document will be uploaded to backend for AI processing.'}
               </p>
             </div>
           </CardContent>
