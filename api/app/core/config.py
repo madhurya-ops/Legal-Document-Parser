@@ -40,7 +40,10 @@ class Settings(BaseSettings):
     allowed_file_types: List[str] = [".pdf", ".doc", ".docx", ".txt"]
     
     # CORS
-    cors_origins: List[str] = ["http://localhost:3000"]
+    cors_origins: List[str] = [
+        "http://localhost:3000",
+        "https://legal-document-parser.vercel.app"
+    ]
     allowed_hosts: List[str] = ["*"]
     
     # Vector Store
