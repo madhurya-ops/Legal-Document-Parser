@@ -72,10 +72,26 @@ def create_app() -> FastAPI:
         allowed_hosts=settings.allowed_hosts
     )
     
-    # CORS middleware
+    # CORS middleware - be more permissive for production debugging
+    cors_origins = settings.cors_origins
+    
+    # Add additional origins for production if not already included
+    production_origins = [
+        "https://legal-document-parser.vercel.app",
+        "https://*.vercel.app"
+    ]
+    
+    for origin in production_origins:
+        if origin not in cors_origins:
+            cors_origins.append(origin)
+    
+    # For debugging - temporarily allow all origins if in production and CORS is failing
+    if not settings.debug:
+        cors_origins = ["*"]
+    
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.cors_origins,
+        allow_origins=cors_origins,
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allow_headers=["*"],
@@ -97,6 +113,15 @@ def create_app() -> FastAPI:
     async def health_check():
         """Health check endpoint."""
         return {"status": "healthy", "version": "1.0.0"}
+    
+    @app.get("/debug/cors")
+    async def debug_cors():
+        """Debug CORS configuration."""
+        return {
+            "cors_origins": cors_origins,
+            "debug_mode": settings.debug,
+            "allowed_hosts": settings.allowed_hosts
+        }
     
     @app.get("/")
     async def root():
