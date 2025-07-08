@@ -10,24 +10,15 @@ from app.schemas import (
 )
 from app.services import crud
 from app.core.database import get_db
-from app.core.security import get_current_active_user
+from ..core.auth0 import get_current_user_from_auth0, require_admin_auth0
 from app.models import User, UserRole
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 logger = logging.getLogger(__name__)
 
-def require_admin(current_user: User = Depends(get_current_active_user)):
-    """Dependency to require admin role"""
-    if current_user.role != UserRole.ADMIN:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
-        )
-    return current_user
-
 @router.get("/dashboard", response_model=AdminDashboardResponse)
 async def get_admin_dashboard(
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin_auth0),
     db: Session = Depends(get_db)
 ):
     """Get admin dashboard data with statistics and metrics"""
@@ -58,7 +49,7 @@ async def get_admin_dashboard(
 async def get_all_users(
     skip: int = 0,
     limit: int = 100,
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin_auth0),
     db: Session = Depends(get_db)
 ):
     """Get all users (admin only)"""
@@ -73,7 +64,7 @@ async def get_all_users(
 async def update_user(
     user_id: str,
     user_update: UserUpdate,
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin_auth0),
     db: Session = Depends(get_db)
 ):
     """Update user information (admin only)"""
@@ -90,7 +81,7 @@ async def update_user(
 async def get_system_metrics(
     metric_name: str = None,
     days: int = 7,
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin_auth0),
     db: Session = Depends(get_db)
 ):
     """Get system metrics (admin only)"""
@@ -104,7 +95,7 @@ async def get_system_metrics(
 @router.post("/metrics")
 async def create_system_metric(
     metric: SystemMetricCreate,
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin_auth0),
     db: Session = Depends(get_db)
 ):
     """Create a new system metric (admin only)"""
@@ -117,7 +108,7 @@ async def create_system_metric(
 
 @router.get("/vector-collections")
 async def get_vector_collections(
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin_auth0),
     db: Session = Depends(get_db)
 ):
     """Get all vector collections (admin only)"""
@@ -131,7 +122,7 @@ async def get_vector_collections(
 @router.post("/vector-collections")
 async def create_vector_collection(
     collection: VectorCollectionCreate,
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin_auth0),
     db: Session = Depends(get_db)
 ):
     """Create a new vector collection (admin only)"""
@@ -145,7 +136,7 @@ async def create_vector_collection(
 @router.post("/vector-upload")
 async def upload_to_vector_store(
     collection_id: str,
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_admin_auth0),
     db: Session = Depends(get_db)
 ):
     """Upload documents to vector store (admin only)"""

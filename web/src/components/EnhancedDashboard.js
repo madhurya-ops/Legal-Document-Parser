@@ -24,6 +24,7 @@ import {
   MessageSquare,
   Bot
 } from "lucide-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const EnhancedDashboard = ({
   user,
@@ -37,7 +38,6 @@ const EnhancedDashboard = ({
   removeFile,
   setSelectedDocument,
   setSearchQuery,
-  handleLogout,
   setShowHome,
   setUser,
   setShowAuth,
@@ -52,6 +52,7 @@ const EnhancedDashboard = ({
     { id: 1, name: 'New Chat', messages: [], lastMessage: '', timestamp: new Date() }
   ]);
   const [currentChatId, setCurrentChatId] = useState(1);
+  const { logout } = useAuth0();
 
   const handleBackToHome = () => {
     setShowHome(true);
@@ -174,7 +175,7 @@ const EnhancedDashboard = ({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={handleLogout}
+                onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
                 className="rounded-full border border-border bg-background/90 hover:bg-muted transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 active:scale-95 text-destructive"
                 title="Sign Out"
               >

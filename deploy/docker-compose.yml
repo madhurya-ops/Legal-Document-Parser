@@ -41,6 +41,7 @@ services:
     env_file:
       - .env
     environment:
+      - PORT=8000
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/legaldoc_db
       - REDIS_URL=redis://redis:6379
       - CORS_ORIGINS=["http://localhost:3001","http://localhost:3000"]

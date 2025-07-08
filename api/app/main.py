@@ -20,7 +20,8 @@ from fastapi.staticfiles import StaticFiles
 from app.core.config import get_settings
 from app.core.database import init_db
 from app.core.logging_config import setup_logging
-from app.api import auth_router, documents_router, chat_router, query_router
+from app.api import documents_router, chat_router, query_router
+from app.api.auth0_routes import router as auth0_router
 from app.api.admin import router as admin_router
 from app.api.legal import router as legal_router
 
@@ -101,7 +102,7 @@ def create_app() -> FastAPI:
     app.add_middleware(GZipMiddleware, minimum_size=1000)
     
     # Include API routes
-    app.include_router(auth_router, prefix="/api")
+    app.include_router(auth0_router, prefix="/api")
     app.include_router(documents_router, prefix="/api")
     app.include_router(chat_router, prefix="/api")
     app.include_router(query_router, prefix="/api")

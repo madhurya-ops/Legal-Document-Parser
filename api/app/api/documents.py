@@ -9,7 +9,7 @@ import logging
 from app.schemas import DocumentCreate, DocumentResponse, DocumentUploadResponse
 from app.services import crud
 from app.core.database import get_db
-from app.core.security import get_current_active_user
+from ..core.auth0 import get_current_user_from_auth0
 from app.models import User
 
 router = APIRouter(prefix="/documents", tags=["documents"])
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 @router.post("/upload", response_model=DocumentUploadResponse)
 async def upload_document(
     file: UploadFile = File(...),
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Upload a document with duplicate detection"""
@@ -92,7 +92,7 @@ async def upload_document(
 
 @router.get("/", response_model=List[DocumentResponse])
 async def get_user_documents(
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Get all documents for the current user"""
@@ -102,7 +102,7 @@ async def get_user_documents(
 @router.delete("/{document_id}")
 async def delete_document(
     document_id: str,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Delete a document (only if owned by user)"""
@@ -118,7 +118,7 @@ async def delete_document(
 @router.get("/{document_id}/analyses")
 async def get_document_analyses(
     document_id: str,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Get all analyses for a specific document"""

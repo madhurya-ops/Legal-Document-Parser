@@ -13,6 +13,36 @@ async def get_user_by_email(db: Session, email: str) -> Optional[User]:
     """Get user by email"""
     return db.query(User).filter(User.email == email).first()
 
+def get_user_by_auth0_sub(db: Session, auth0_sub: str) -> Optional[User]:
+    """Get user by Auth0 subject ID"""
+    return db.query(User).filter(User.auth0_sub == auth0_sub).first()
+
+def create_user_from_auth0(db: Session, auth0_sub: str, email: str, name: Optional[str] = None) -> User:
+    """Create a new user from Auth0 authentication"""
+    from ..models.user import UserRole
+    
+    # Extract username from email or name
+    username = name or email.split('@')[0]
+    
+    # Ensure username is unique
+    base_username = username
+    counter = 1
+    while db.query(User).filter(User.username == username).first():
+        username = f"{base_username}{counter}"
+        counter += 1
+    
+    db_user = User(
+        username=username,
+        email=email,
+        auth0_sub=auth0_sub,
+        hashed_password=None,  # No password for Auth0 users
+        role=UserRole.USER
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
 async def get_user_by_username(db: Session, username: str) -> Optional[User]:
     """Get user by username"""
     return db.query(User).filter(User.username == username).first()

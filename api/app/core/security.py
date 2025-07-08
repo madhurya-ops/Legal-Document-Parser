@@ -9,11 +9,7 @@ import secrets
 from datetime import datetime, timedelta
 from typing import Optional, Union
 
-from fastapi import HTTPException, status, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from passlib.context import CryptContext
-from jose import JWTError, jwt
-from sqlalchemy.orm import Session
 
 from .config import get_settings
 from .database import get_db
@@ -21,11 +17,6 @@ from .database import get_db
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Bearer token security
-security = HTTPBearer()
-
-# Token expiration constant for backward compatibility
-ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
 
 
 class SecurityError(Exception):
@@ -69,106 +60,13 @@ def create_access_token(
     """Create a JWT access token."""
     settings = get_settings()
     
-    to_encode = data.copy()
-    
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(
-            minutes=settings.access_token_expire_minutes
-        )
-    
-    to_encode.update({"exp": expire, "iat": datetime.utcnow()})
-    
-    encoded_jwt = jwt.encode(
-        to_encode, 
-        settings.secret_key, 
-        algorithm=settings.algorithm
-    )
-    
-    return encoded_jwt
+    raise NotImplementedError("JWT generation is no longer supported. Migrate to Auth0.")
 
 
-def verify_access_token(token: str) -> dict:
-    """Verify and decode a JWT access token."""
-    settings = get_settings()
-    
-    try:
-        payload = jwt.decode(
-            token, 
-            settings.secret_key, 
-            algorithms=[settings.algorithm]
-        )
-        
-        # Check if token is expired
-        exp = payload.get("exp")
-        if exp and datetime.utcnow() > datetime.fromtimestamp(exp):
-            raise AuthenticationError("Token has expired")
-        
-        return payload
-        
-    except JWTError as e:
-        raise AuthenticationError(f"Invalid token: {str(e)}")
 
 
-def get_current_user_from_token(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: Session = Depends(get_db)
-):
-    """Get current user from JWT token."""
-    from ..models.user import User
-    
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    
-    try:
-        # Verify token
-        payload = verify_access_token(credentials.credentials)
-        email: str = payload.get("sub")
-        
-        if email is None:
-            raise credentials_exception
-            
-    except AuthenticationError:
-        raise credentials_exception
-    
-    # Get user from database
-    user = db.query(User).filter(User.email == email).first()
-    if user is None:
-        raise credentials_exception
-    
-    if not user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Inactive user"
-        )
-    
-    return user
 
 
-def get_current_active_user(
-    current_user = Depends(get_current_user_from_token)
-):
-    """Get current active user."""
-    return current_user
-
-
-def require_admin(
-    current_user = Depends(get_current_active_user)
-):
-    """Require admin role."""
-    from ..models.user import UserRole
-    
-    if current_user.role != UserRole.ADMIN:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
-        )
-    
-    return current_user
 
 
 def check_permissions(

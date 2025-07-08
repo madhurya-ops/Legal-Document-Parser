@@ -7,7 +7,7 @@ import json
 from app.schemas import ChatSessionCreate, ChatSessionResponse, ChatMessageCreate, ChatMessageResponse
 from app.services import crud
 from app.core.database import get_db
-from app.core.security import get_current_active_user
+from ..core.auth0 import get_current_user_from_auth0
 from app.models import User
 
 router = APIRouter(prefix="/chat", tags=["chat"])
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 @router.post("/sessions", response_model=ChatSessionResponse)
 async def create_chat_session(
     session_data: ChatSessionCreate,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Create a new chat session"""
@@ -33,7 +33,7 @@ async def create_chat_session(
 
 @router.get("/sessions", response_model=List[ChatSessionResponse])
 async def get_chat_sessions(
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Get all chat sessions for the current user"""
@@ -47,7 +47,7 @@ async def get_chat_sessions(
 @router.get("/sessions/{session_id}", response_model=ChatSessionResponse)
 async def get_chat_session(
     session_id: str,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Get a specific chat session"""
@@ -65,7 +65,7 @@ async def get_chat_session(
 @router.delete("/sessions/{session_id}")
 async def delete_chat_session(
     session_id: str,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Delete a chat session"""
@@ -84,7 +84,7 @@ async def delete_chat_session(
 async def create_chat_message(
     session_id: str,
     message_data: ChatMessageCreate,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Add a message to a chat session"""
@@ -108,7 +108,7 @@ async def create_chat_message(
 @router.get("/sessions/{session_id}/messages", response_model=List[ChatMessageResponse])
 async def get_chat_messages(
     session_id: str,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Get all messages for a chat session"""
@@ -123,7 +123,7 @@ async def get_chat_messages(
 async def export_chat_session(
     session_id: str,
     format: str = "json",
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Export chat session in various formats"""

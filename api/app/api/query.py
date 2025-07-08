@@ -7,7 +7,7 @@ import logging
 from app.services.ai_service import ai_service
 from app.utils.pdf_parser import extract_text_from_pdf, is_pdf_file
 from app.core.database import get_db
-from app.core.security import get_current_active_user
+from ..core.auth0 import get_current_user_from_auth0
 from app.models import User
 
 router = APIRouter(prefix="/query", tags=["query"])
@@ -22,7 +22,7 @@ class QueryRequest(BaseModel):
 @router.post("/ask")
 async def ask_question(
     query_data: QueryRequest,
-    current_user: User = Depends(get_current_active_user)
+    current_user: User = Depends(get_current_user_from_auth0)
 ):
     """Ask a question with optional file context"""
     try:
@@ -67,7 +67,7 @@ async def ask_question(
 @router.post("/extract-pdf-text")
 async def extract_pdf_text(
     file: UploadFile = File(...),
-    current_user: User = Depends(get_current_active_user)
+    current_user: User = Depends(get_current_user_from_auth0)
 ):
     """Extract text content from uploaded PDF file"""
     try:

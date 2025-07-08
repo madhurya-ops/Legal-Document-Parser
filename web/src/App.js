@@ -14,6 +14,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import EnhancedDashboard from "./components/EnhancedDashboard";
 import { getToken, getCurrentUser, clearToken } from "./api";
 import { Button } from "./components/ui/button";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const tabs = [
   "Home",
@@ -36,6 +37,7 @@ export default function App() {
   const [showAbout, setShowAbout] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
+  const { logout } = useAuth0();
 
   // Check authentication on mount
   useEffect(() => {
@@ -75,11 +77,9 @@ export default function App() {
     }
   };
 
+  // Remove the old handleLogout function and replace with Auth0 logout
   const handleLogout = () => {
-    clearToken();
-    setUser(null);
-    setShowHome(true);
-    setShowAuth(false);
+    logout({ logoutParams: { returnTo: window.location.origin } });
   };
 
   // Persist chat messages in localStorage
@@ -275,6 +275,7 @@ export default function App() {
               <AdminDashboard 
                 user={user} 
                 onClose={() => setShowAdminDashboard(false)} 
+                onLogout={handleLogout}
               />
             ) : (
               <EnhancedDashboard

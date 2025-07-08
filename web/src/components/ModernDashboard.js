@@ -24,6 +24,7 @@ import {
   Send,
   RotateCcw
 } from 'lucide-react';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ModernDashboard = ({
   user,
@@ -37,7 +38,6 @@ const ModernDashboard = ({
   removeFile,
   setSelectedDocument,
   setSearchQuery,
-  handleLogout,
   setShowHome,
   setUser,
   setShowAuth,
@@ -52,6 +52,7 @@ const ModernDashboard = ({
     { id: 2, name: 'Legal Research', messages: [], lastMessage: 'Help me understand property law', timestamp: new Date(Date.now() - 3600000) }
   ]);
   const [currentChatId, setCurrentChatId] = useState(1);
+  const { logout } = useAuth0();
 
   const handleNewChat = () => {
     const newId = Math.max(...chatSessions.map(s => s.id)) + 1;
@@ -172,7 +173,7 @@ const ModernDashboard = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={handleLogout}
+                        onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
                         className="p-1 h-6 w-6 text-destructive hover:text-destructive"
                         title="Logout"
                       >

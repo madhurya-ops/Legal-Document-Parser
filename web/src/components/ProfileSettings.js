@@ -14,8 +14,10 @@ import {
   Save,
   Camera
 } from "lucide-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ProfileSettings = ({ isOpen, onClose, user, onSave }) => {
+  const { user: auth0User, isAuthenticated, isLoading } = useAuth0();
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     username: user?.username || '',
@@ -39,6 +41,39 @@ const ProfileSettings = ({ isOpen, onClose, user, onSave }) => {
   };
 
   if (!isOpen) return null;
+
+  if (isLoading) return <div>Loading ...</div>;
+
+  if (isAuthenticated && auth0User) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40" onClick={onClose} />
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-50">
+          <Card className="bg-background/95 backdrop-blur-lg border border-border shadow-2xl rounded-3xl overflow-hidden">
+            <div className="p-6 border-b border-border/30 bg-gradient-to-r from-primary/5 to-secondary/5">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <img src={auth0User.picture} alt={auth0User.name} className="w-12 h-12 rounded-full" />
+                  <div>
+                    <h2 className="text-lg font-semibold text-foreground">{auth0User.name}</h2>
+                    <p className="text-xs text-muted-foreground">{auth0User.email}</p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onClose}
+                  className="p-2 h-8 w-8"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Card, CardContent, CardHeader, CardFooter } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -19,6 +20,7 @@ function parseErrorMessage(err, mode) {
 }
 
 export default function AuthPage({ onAuthSuccess, onBack, cardSize = "xl" }) {
+  const { loginWithRedirect, isAuthenticated, user, isLoading, error: auth0Error } = useAuth0();
   const [mode, setMode] = useState("login");
   const [form, setForm] = useState({ username: "", email: "", password: "", confirmPassword: "" });
   const [loading, setLoading] = useState(false);
@@ -41,12 +43,11 @@ export default function AuthPage({ onAuthSuccess, onBack, cardSize = "xl" }) {
     setSuccess("");
     try {
       if (mode === "login") {
-        const data = await loginUser(form.email, form.password);
-        storeToken(data.access_token);
-        const user = await getCurrentUser(data.access_token);
-        setSuccess("Welcome back! Redirecting...");
-        setTimeout(() => onAuthSuccess(user), 700);
+        // Use Auth0 login
+        await loginWithRedirect();
+        // Optionally, handle post-login logic here if needed
       } else {
+        // Keep your existing signup logic if you want to support local signup
         await signupUser(form.username, form.email, form.password);
         setSuccess("Signup successful! Please log in.");
         setMode("login");
@@ -58,6 +59,10 @@ export default function AuthPage({ onAuthSuccess, onBack, cardSize = "xl" }) {
       setLoading(false);
     }
   };
+
+  if (isAuthenticated) {
+    return <div>You're already logged in!</div>;
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto shadow-2xl rounded-3xl bg-background/90 border border-border animate-fade-in-up relative overflow-hidden my-12">
@@ -173,6 +178,7 @@ export default function AuthPage({ onAuthSuccess, onBack, cardSize = "xl" }) {
           )}
           {error && <div className="w-full text-center text-red-600 text-base py-2 animate-fade-in-up">{error}</div>}
           {success && <div className="w-full text-center text-green-600 text-base py-2 animate-fade-in-up">{success}</div>}
+          {auth0Error && <div className="w-full text-center text-red-600 text-base py-2 animate-fade-in-up">{auth0Error.message}</div>}
           <Button
             type="submit"
             className="w-full rounded-xl py-3 text-lg font-semibold transition-all duration-300 hover:scale-105 disabled:opacity-60 shadow-md"

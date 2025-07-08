@@ -11,7 +11,7 @@ from app.schemas import (
 from app.services import crud
 from app.services.legal_analysis import clause_extractor, compliance_checker, precedent_engine
 from app.core.database import get_db
-from app.core.security import get_current_active_user
+from ..core.auth0 import get_current_user_from_auth0, require_admin_auth0
 from app.models import User, Document
 
 router = APIRouter(prefix="/legal", tags=["legal"])
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 @router.post("/extract-clauses", response_model=ClauseExtractionResponse)
 async def extract_legal_clauses(
     request: ClauseExtractionRequest,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Extract and analyze legal clauses from document content"""
@@ -63,7 +63,7 @@ async def extract_legal_clauses(
 @router.post("/compliance-check", response_model=ComplianceCheckResponse)
 async def check_compliance(
     request: ComplianceCheckRequest,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Check document compliance with relevant regulations"""
@@ -108,7 +108,7 @@ async def check_compliance(
 @router.post("/precedent-search", response_model=PrecedentSearchResponse)
 async def search_precedents(
     request: PrecedentSearchRequest,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Search for relevant legal precedents"""
@@ -129,7 +129,7 @@ async def search_precedents(
 @router.get("/documents/{document_id}/analyses")
 async def get_document_analyses(
     document_id: str,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Get all analyses for a specific document"""
@@ -144,7 +144,7 @@ async def get_document_analyses(
 async def get_document_analysis_by_type(
     document_id: str,
     analysis_type: AnalysisType,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Get the latest analysis of a specific type for a document"""
@@ -165,7 +165,7 @@ async def get_document_analysis_by_type(
 async def analyze_document(
     document_id: str,
     analysis_type: AnalysisType,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Perform specific analysis on a document"""
@@ -198,7 +198,7 @@ async def analyze_document(
 async def download_analysis(
     document_id: str,
     format: str = "pdf",
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user_from_auth0),
     db: Session = Depends(get_db)
 ):
     """Download analysis results in specified format"""

@@ -33,7 +33,10 @@ class User(Base):
     # Authentication fields
     username = Column(String(50), unique=True, index=True, nullable=False)
     email = Column(String(255), unique=True, index=True, nullable=False)
-    hashed_password = Column(String(255), nullable=False)
+    hashed_password = Column(String(255), nullable=True)  # Made nullable for Auth0 users
+    
+    # Auth0 integration
+    auth0_sub = Column(String(255), unique=True, index=True, nullable=True)
     
     # User status
     is_active = Column(Boolean, default=True, nullable=False)
