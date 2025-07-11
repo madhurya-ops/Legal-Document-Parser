@@ -6,6 +6,7 @@ import { Bot, User, FileText, Scale, Loader2, MessageSquare, Send, Download, Plu
 import { sendQuery, extractPdfText } from "../api";
 import DocumentExporter from "./DocumentExporter";
 import RightPanel from "./RightPanel";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function readFileAsText(file) {
   return new Promise((resolve, reject) => {
@@ -46,6 +47,7 @@ const ChatInterface = React.memo(function ChatInterface({ uploadedFile, messages
   const [showExporter, setShowExporter] = useState(false);
   const scrollAreaRef = useRef(null);
   const lastMessageRef = useRef(null);
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     if (uploadedFile) {
@@ -105,7 +107,7 @@ const ChatInterface = React.memo(function ChatInterface({ uploadedFile, messages
       }
       
       console.log('Sending query to backend:', payload);
-      const answer = await sendQuery(payload);
+      const answer = await sendQuery(payload, getAccessTokenSilently);
       console.log('Received response from backend:', answer);
       
       const assistantMessage = {

@@ -12,8 +12,11 @@ root.render(
   domain="dev-8oivjmih178u6qpg.us.auth0.com"
   clientId="USWlBGBM57kpWY8L5g1BTwYZ2uUArTAF"
   authorizationParams={{
-    redirect_uri: window.location.origin
+    redirect_uri: window.location.origin,
+    audience: "https://legaldoc-api"
   }}
+  useRefreshTokens={true}
+  cacheLocation="localstorage"
   >
     <React.StrictMode>
       <ThemeProvider>

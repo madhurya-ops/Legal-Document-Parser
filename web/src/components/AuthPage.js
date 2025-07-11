@@ -60,8 +60,9 @@ export default function AuthPage({ onAuthSuccess, onBack, cardSize = "xl" }) {
     }
   };
 
+  // If user is authenticated, the parent component will handle the redirect
   if (isAuthenticated) {
-    return <div>You're already logged in!</div>;
+    return null;
   }
 
   return (
@@ -190,13 +191,21 @@ export default function AuthPage({ onAuthSuccess, onBack, cardSize = "xl" }) {
         <div className="mt-6">
           <div className="text-center text-sm text-muted-foreground">Or continue with</div>
           <div className="mt-4 grid grid-cols-2 gap-3">
-            <Button variant="outline" className="w-full bg-transparent" disabled>
+            <Button 
+              variant="outline" 
+              className="w-full bg-transparent" 
+              onClick={() => loginWithRedirect({ connection: 'google-oauth2' })}
+            >
               <Sparkles className="mr-2 h-4 w-4" />
               Google
             </Button>
-            <Button variant="outline" className="w-full bg-transparent" disabled>
+            <Button 
+              variant="outline" 
+              className="w-full bg-transparent" 
+              onClick={() => loginWithRedirect({ connection: 'apple' })}
+            >
               <Sparkles className="mr-2 h-4 w-4" />
-              Microsoft
+              Apple
             </Button>
           </div>
         </div>

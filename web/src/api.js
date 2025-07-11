@@ -36,15 +36,21 @@ const fetchWithRetry = async (url, options, retries = API_CONFIG.retries) => {
 };
 
 // Sends a question to the FastAPI backend and returns the answer
-export const sendQuery = async (payload) => {
+export const sendQuery = async (payload, getAccessTokenSilently = null) => {
   try {
-    const token = getToken();
     const headers = {
       'Content-Type': 'application/json',
     };
     
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+    if (getAccessTokenSilently) {
+      try {
+        const token = await getAccessTokenSilently({
+          audience: 'https://legaldoc-api'
+        });
+        headers['Authorization'] = `Bearer ${token}`;
+      } catch (error) {
+        console.warn('Could not get Auth0 token, proceeding without authentication:', error);
+      }
     }
     
     const response = await fetchWithRetry(`${API_CONFIG.baseURL}/api/query/ask`, {
@@ -123,14 +129,16 @@ export const updateUserProfile = async (userData) => {
   return response.json();
 };
 
+// These functions are now replaced by Auth0's token management
 export function storeToken(token) {
-  localStorage.setItem('access_token', token);
+  console.warn('storeToken is deprecated and managed by Auth0');
 }
 export function getToken() {
-  return localStorage.getItem('access_token');
+  console.warn('getToken is deprecated, use Auth0 context for tokens');
+  return null;
 }
 export function clearToken() {
-  localStorage.removeItem('access_token');
+  console.warn('clearToken is deprecated and managed by Auth0');
 }
 
 // Admin API helpers
@@ -243,9 +251,20 @@ export const deleteDocument = async (documentId) => {
 };
 
 // Legal Analysis API helpers
-export const extractClauses = async (documentContent, documentId = null) => {
-  const token = getToken();
-  if (!token) throw new Error('Authentication required');
+export const extractClauses = async (documentContent, documentId = null, getAccessTokenSilently = null) => {
+  let token = null;
+  if (getAccessTokenSilently) {
+    try {
+      token = await getAccessTokenSilently({
+        audience: 'https://legaldoc-api'
+      });
+    } catch (error) {
+      throw new Error('Authentication required');
+    }
+  } else {
+    token = getToken();
+    if (!token) throw new Error('Authentication required');
+  }
   
   const response = await fetch(`${baseURL}/api/legal/extract-clauses`, {
     method: 'POST',
@@ -259,10 +278,21 @@ export const extractClauses = async (documentContent, documentId = null) => {
   return response.json();
 };
 
-export const checkCompliance = async (documentContent, jurisdiction = 'india', documentId = null) => {
-  const token = getToken();
-  if (!token) throw new Error('Authentication required');
-  
+export const checkCompliance = async (documentContent, jurisdiction = 'india', documentId = null, getAccessTokenSilently = null) => {
+  let token = null;
+  if (getAccessTokenSilently) {
+    try {
+      token = await getAccessTokenSilently({
+        audience: 'https://legaldoc-api'
+      });
+    } catch (error) {
+      throw new Error('Authentication required');
+    }
+  } else {
+    token = getToken();
+    if (!token) throw new Error('Authentication required');
+  }
+
   const response = await fetch(`${baseURL}/api/legal/compliance-check`, {
     method: 'POST',
     headers: { 
@@ -279,10 +309,21 @@ export const checkCompliance = async (documentContent, jurisdiction = 'india', d
   return response.json();
 };
 
-export const searchPrecedents = async (query, jurisdiction = 'india', documentType = null) => {
-  const token = getToken();
-  if (!token) throw new Error('Authentication required');
-  
+export const searchPrecedents = async (query, jurisdiction = 'india', documentType = null, getAccessTokenSilently = null) => {
+  let token = null;
+  if (getAccessTokenSilently) {
+    try {
+      token = await getAccessTokenSilently({
+        audience: 'https://legaldoc-api'
+      });
+    } catch (error) {
+      throw new Error('Authentication required');
+    }
+  } else {
+    token = getToken();
+    if (!token) throw new Error('Authentication required');
+  }
+
   const response = await fetch(`${baseURL}/api/legal/precedent-search`, {
     method: 'POST',
     headers: { 

@@ -37,27 +37,31 @@ export default function App() {
   const [showAbout, setShowAbout] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
-  const { logout } = useAuth0();
+  const { logout, isAuthenticated, user: auth0User, isLoading } = useAuth0();
 
-  // Check authentication on mount
+  // Check authentication on mount and when auth state changes
   useEffect(() => {
-    const token = getToken();
-    if (!token) {
-      setAuthLoading(false);
+    if (isLoading) {
+      setAuthLoading(true);
       return;
     }
-    getCurrentUser(token)
-      .then((u) => {
-        setUser(u);
-        setShowHome(false);
-      })
-      .catch(() => {
-        clearToken();
-        setUser(null);
-        setShowHome(true);
-      })
-      .finally(() => setAuthLoading(false));
-  }, []);
+    
+    if (isAuthenticated && auth0User) {
+      // User is authenticated via Auth0
+      setUser(auth0User);
+      setShowHome(false);
+      setShowAuth(false);
+      setShowAbout(false);
+      setAuthLoading(false);
+    } else {
+      // User is not authenticated
+      setUser(null);
+      setShowHome(true);
+      setShowAuth(false);
+      setShowAbout(false);
+      setAuthLoading(false);
+    }
+  }, [isAuthenticated, auth0User, isLoading]);
 
   // Filter documents based on search query
   const filteredDocuments = useMemo(() => {

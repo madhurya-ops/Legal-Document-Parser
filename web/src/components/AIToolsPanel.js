@@ -3,6 +3,7 @@ import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { sendQuery, extractClauses, checkCompliance, searchPrecedents, extractPdfText } from "../api";
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   FileText,
   Scale,
@@ -20,6 +21,7 @@ import {
 const AIToolsPanel = ({ isOpen, onClose, selectedDocument, messages, setMessages, onToolUsed }) => {
   const [loadingTool, setLoadingTool] = useState(null);
   const isDocumentUploaded = !!selectedDocument;
+  const { getAccessTokenSilently } = useAuth0();
 
   const handleToolClick = async (toolName, query) => {
     if (!isDocumentUploaded) {
@@ -45,15 +47,15 @@ const AIToolsPanel = ({ isOpen, onClose, selectedDocument, messages, setMessages
       // Use specialized APIs based on tool type
       if (toolName === 'Clause Extractor') {
         console.log('Using clause extraction API');
-        response = await extractClauses(fileContent, selectedDocument?.id);
+        response = await extractClauses(fileContent, selectedDocument?.id, getAccessTokenSilently);
         response = formatClauseResponse(response);
       } else if (toolName === 'Compliance Checker') {
         console.log('Using compliance checking API');
-        response = await checkCompliance(fileContent, 'india', selectedDocument?.id);
+        response = await checkCompliance(fileContent, 'india', selectedDocument?.id, getAccessTokenSilently);
         response = formatComplianceResponse(response);
       } else if (toolName === 'Legal Research') {
         console.log('Using precedent search API');
-        response = await searchPrecedents(query, 'india', selectedDocument?.type);
+        response = await searchPrecedents(query, 'india', selectedDocument?.type, getAccessTokenSilently);
         response = formatPrecedentResponse(response);
       } else {
         // Use general query API for other tools
@@ -64,7 +66,7 @@ const AIToolsPanel = ({ isOpen, onClose, selectedDocument, messages, setMessages
           tool_type: toolName.toLowerCase().replace(/\s+/g, '_')
         };
         console.log(`Sending ${toolName} request to backend:`, payload);
-        response = await sendQuery(payload);
+        response = await sendQuery(payload, getAccessTokenSilently);
         console.log(`Received ${toolName} response:`, response);
       }
 
