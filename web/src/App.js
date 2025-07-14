@@ -12,7 +12,8 @@ import HomePage from "./components/HomePage";
 import AboutPage from "./components/AboutPage";
 import AdminDashboard from "./components/AdminDashboard";
 import EnhancedDashboard from "./components/EnhancedDashboard";
-import { getToken, getCurrentUser, clearToken } from "./api";
+import AuthCallback from "./components/AuthCallback";
+// Removed unused imports after implementing new Auth0 authentication
 import { Button } from "./components/ui/button";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -38,6 +39,9 @@ export default function App() {
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   const { logout, isAuthenticated, user: auth0User, isLoading } = useAuth0();
+
+  // Check if we're handling a callback
+  const isCallback = window.location.search.includes('code=') && window.location.search.includes('state=');
 
   // Check authentication on mount and when auth state changes
   useEffect(() => {
@@ -212,6 +216,11 @@ export default function App() {
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
+  }
+
+  // Handle Auth0 callback
+  if (isCallback) {
+    return <AuthCallback />;
   }
 
   // Add top padding only for non-chat pages

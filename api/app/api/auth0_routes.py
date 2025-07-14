@@ -8,6 +8,8 @@ Modern OAuth 2.0 + OpenID Connect authentication routes using Auth0.
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import Dict, Any
+import httpx
+import json
 
 from ..core.auth0 import (
     get_auth0_user,
@@ -16,8 +18,9 @@ from ..core.auth0 import (
     get_token_info
 )
 from ..core.database import get_db
+from ..core.config import get_settings
 from ..schemas import UserResponse
-from ..services.crud import update_user_last_login
+from ..services.crud import update_user_last_login, get_user_by_auth0_sub, create_user_from_auth0
 
 router = APIRouter(prefix="/auth", tags=["Auth0 Authentication"])
 

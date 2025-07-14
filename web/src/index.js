@@ -17,6 +17,7 @@ root.render(
   }}
   useRefreshTokens={true}
   cacheLocation="localstorage"
+  skipRedirectCallback={true}
   >
     <React.StrictMode>
       <ThemeProvider>
